@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -61,50 +62,12 @@ class _LogInScreenState extends State<LogInScreen> {
               ],
             ),
             MyButton(
-              onTap: signIn,
-              text: "Registrar",
+              onTap: () => Navigator.pushNamed(context, ''),
+              text: "LOG IN",
             ),
             const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: const [
-                  Expanded(
-                    child: Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      'Continuar amb',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  'No tens compte?',
-                  style: TextStyle(color: Colors.black),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-              ],
-            )
           ],
         ),
       ),
