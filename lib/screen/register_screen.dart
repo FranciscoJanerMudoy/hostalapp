@@ -20,7 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final _constrasena = TextEditingController();
 
-  final _name = TextEditingController();
+  final _type = TextEditingController();
 
   final _key = GlobalKey<FormState>();
 
@@ -55,6 +55,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 color: Colors.white,
               ),
               fieldPassword(context),
+              const Divider(
+                color: Colors.white,
+              ),
+              fieldType(),
               const Divider(
                 color: Colors.white,
               ),
@@ -147,9 +151,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  Widget fieldType() {
+    return SizedBox(
+      width: 340,
+      child: TextFormField(
+        keyboardType: TextInputType.text,
+        controller: _type,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        decoration: InputDecoration(
+          labelText: 'Tipo',
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black, width: 3),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          filled: true,
+          fillColor: Colors.white,
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
-    _name.dispose();
     _email.dispose();
     _constrasena.dispose();
     super.dispose();
@@ -160,8 +183,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!esValid) return;
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _email.text.trim(), password: _constrasena.text.trim());
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _email.text.trim(), password: _constrasena.text.trim())
+          .whenComplete(
+              () => addUser(FirebaseAuth.instance.currentUser!.uid, _type.text))
+          .whenComplete(() => Navigator.pushNamed(context, 'Home'));
     } on FirebaseAuthException {}
   }
 }
