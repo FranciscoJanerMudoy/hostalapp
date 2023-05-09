@@ -8,7 +8,8 @@ import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
 class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+  final Function()? onTap;
+  const LogInScreen({super.key, required this.onTap});
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -62,12 +63,32 @@ class _LogInScreenState extends State<LogInScreen> {
               ],
             ),
             MyButton(
-              onTap: () => Navigator.pushNamed(context, ''),
+              onTap: signIn,
               text: "LOG IN",
             ),
             const SizedBox(
               height: 20,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'No tens compte?',
+                  style: TextStyle(color: Colors.black),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                GestureDetector(
+                  onTap: widget.onTap,
+                  child: const Text(
+                    'Clica aqui!!',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

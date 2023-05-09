@@ -13,9 +13,9 @@ class HomeScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const LogInScreen();
+            return const LoginOrRegisterScreen();
           } else {
-            return const LogInScreen();
+            return const LoginOrRegisterScreen();
           }
         },
       ),

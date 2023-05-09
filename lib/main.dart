@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'HostalApp',
-      initialRoute: 'Login',
+      initialRoute: 'Home',
       routes: customRutes,
     );
   }
