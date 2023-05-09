@@ -11,6 +11,7 @@ Future<void> addUser(String uid, String tipo) async {
   await collection_users.add(usuario.toMap());
 }
 
+//TODO REALIZAR ESTE METODO
 Future<List<Usuario>> getUserById(String uid) async {
   List<Usuario> usuarios = [];
 
