@@ -160,11 +160,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!esValid) return;
 
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: _email.text.trim(), password: _constrasena.text.trim())
-          .whenComplete(
-              () => addUser(FirebaseAuth.instance.currentUser!.uid, _tipo));
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _email.text.trim(), password: _constrasena.text.trim());
     } on FirebaseAuthException {}
   }
 }
