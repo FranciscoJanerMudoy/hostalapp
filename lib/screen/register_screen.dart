@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Text(
-                  'Emplena els següents camps:',
+                  'Rellena los siguientes campos:',
                   style: TextStyle(fontSize: 25),
                 ),
               ),
@@ -62,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const Divider(
                 color: Colors.white,
               ),
-              MyButton(
+              MyButtonWidget(
                 onTap: signUp,
                 text: "Registrar",
               ),
@@ -73,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Ja tens compte?',
+                    'Ya tienes cuenta?',
                     style: TextStyle(color: Colors.black),
                   ),
                   const SizedBox(
@@ -105,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (email) => email != null && EmailValidator.validate(email)
             ? null
-            : 'Introdueix un email valid',
+            : 'Introduce un email valido',
         decoration: InputDecoration(
           labelText: 'Email',
           border: OutlineInputBorder(
@@ -120,18 +120,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget fieldPassword(BuildContext context) {
-    final passwProvider = Provider.of<LoginProvider>(context);
+    final passwProvider = Provider.of<PaswwProvider>(context);
     return SizedBox(
       width: 340,
       child: TextFormField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (valor) => valor != null && valor.length < 6
-            ? 'Introdueix un minim de 6 caracters'
+            ? 'Introduce un minimo de 6 caracteres'
             : null,
         controller: _constrasena,
         obscureText: passwProvider.password,
         decoration: InputDecoration(
-          labelText: 'Contrasenya',
+          labelText: 'Contraseña',
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black, width: 3),
             borderRadius: BorderRadius.circular(8),
@@ -189,6 +189,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           .whenComplete(
               () => addUser(FirebaseAuth.instance.currentUser!.uid, _type.text))
           .whenComplete(() => Navigator.pushNamed(context, 'Home'));
-    } on FirebaseAuthException {}
+    } on FirebaseAuthException {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialogWidget.buildAlertDialog(context);
+          });
+    }
   }
 }

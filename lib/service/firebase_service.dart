@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hostalapp/models/models.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
+FirebaseAuth _auth = FirebaseAuth.instance;
+final User? user = _auth.currentUser;
+String? uid;
+
 CollectionReference collection_users = db.collection("Usuarios");
 
 Future<void> addUser(String uid, String tipo) async {
@@ -12,15 +16,14 @@ Future<void> addUser(String uid, String tipo) async {
 }
 
 //TODO REALIZAR ESTE METODO
-Future<List<Usuario>> getUserById(String uid) async {
-  List<Usuario> usuarios = [];
-
+Future<Usuario> getUserById(String uid) async {
+  Usuario usuario = Usuario();
   QuerySnapshot querySnapshot =
       await collection_users.where("uid", isEqualTo: uid).get();
 
   querySnapshot.docs.forEach((element) {
-    usuarios.add(Usuario.fromMap(element.data() as Map<String, dynamic>));
+    usuario = Usuario.fromMap(element.data() as Map<String, dynamic>);
   });
 
-  return usuarios;
+  return usuario;
 }

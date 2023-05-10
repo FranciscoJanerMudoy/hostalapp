@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LoginProvider extends ChangeNotifier {
+class PaswwProvider extends ChangeNotifier {
   bool _showpassw = true;
 
   bool get password {

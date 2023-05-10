@@ -1,1 +1,1 @@
-export 'package:hostalapp/providers/login_provider.dart';
+export 'package:hostalapp/providers/passw_provider.dart';

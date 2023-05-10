@@ -58,11 +58,11 @@ class _LogInScreenState extends State<LogInScreen> {
                     Navigator.pushNamed(context, 'Reset',
                         arguments: _email.text);
                   },
-                  child: const Text('Contrasenya perduda?'),
+                  child: const Text('Contraseña perdida?'),
                 )
               ],
             ),
-            MyButton(
+            MyButtonWidget(
               onTap: signIn,
               text: "LOG IN",
             ),
@@ -73,7 +73,7 @@ class _LogInScreenState extends State<LogInScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'No tens compte?',
+                  'No tienes cuenta?',
                   style: TextStyle(color: Colors.black),
                 ),
                 const SizedBox(
@@ -104,7 +104,7 @@ class _LogInScreenState extends State<LogInScreen> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (email) => email != null && EmailValidator.validate(email)
             ? null
-            : 'Introdueix un email valid',
+            : 'Introduce un email valido',
         decoration: InputDecoration(
           labelText: 'Email',
           border: OutlineInputBorder(
@@ -119,19 +119,19 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Widget fieldPassword(BuildContext context) {
-    final passwProvider = Provider.of<LoginProvider>(context);
+    final passwProvider = Provider.of<PaswwProvider>(context);
 
     return SizedBox(
       width: 340,
       child: TextFormField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (valor) => valor != null && valor.length < 6
-            ? 'Introdueix un minim de 6 caracters'
+            ? 'Introduce un minimo de 6 caracteres'
             : null,
         controller: _constrasena,
         obscureText: passwProvider.password,
         decoration: InputDecoration(
-          labelText: 'Contrasenya',
+          labelText: 'Contraseña',
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black, width: 10),
             borderRadius: BorderRadius.circular(8),
@@ -162,6 +162,13 @@ class _LogInScreenState extends State<LogInScreen> {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text.trim(), password: _constrasena.text.trim());
-    } on FirebaseAuthException {}
+    } on FirebaseAuthException {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialogWidget.buildAlertDialog(context);
+        },
+      );
+    }
   }
 }
