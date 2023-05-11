@@ -9,13 +9,13 @@ final User? user = _auth.currentUser;
 String? uid;
 
 CollectionReference collection_users = db.collection("Usuarios");
+CollectionReference collection_products = db.collection("Productos");
 
-Future<void> addUser(String uid, String tipo) async {
-  Usuario usuario = Usuario(uid: uid, tipo: tipo);
+Future<void> addUser(String uid, String tipo, String nombre) async {
+  Usuario usuario = Usuario(uid: uid, tipo: tipo, nombre: nombre);
   await collection_users.add(usuario.toMap());
 }
 
-//TODO REALIZAR ESTE METODO
 Future<Usuario> getUserById(String uid) async {
   Usuario usuario = Usuario();
   QuerySnapshot querySnapshot =
@@ -26,4 +26,16 @@ Future<Usuario> getUserById(String uid) async {
   });
 
   return usuario;
+}
+
+Future<List<Product>> getAllProducts() async {
+  List<Product> productos = [];
+
+  QuerySnapshot querySnapshot = await collection_products.get();
+
+  querySnapshot.docs.forEach((element) {
+    productos.add(Product.fromMap(element.data() as Map<String, dynamic>));
+  });
+
+  return productos;
 }

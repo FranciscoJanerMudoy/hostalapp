@@ -16,11 +16,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _username = TextEditingController();
   final _email = TextEditingController();
-
   final _constrasena = TextEditingController();
-
-  final _type = TextEditingController();
+  TextEditingController _type = TextEditingController();
 
   final _key = GlobalKey<FormState>();
 
@@ -50,17 +49,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: TextStyle(fontSize: 25),
                 ),
               ),
+              fieldUserName(),
+              const SizedBox(
+                height: 10,
+              ),
               fieldEmail(),
-              const Divider(
-                color: Colors.white,
+              const SizedBox(
+                height: 10,
               ),
               fieldPassword(context),
-              const Divider(
-                color: Colors.white,
+              const SizedBox(
+                height: 10,
               ),
               fieldType(),
-              const Divider(
-                color: Colors.white,
+              const SizedBox(
+                height: 10,
               ),
               MyButtonWidget(
                 onTap: signUp,
@@ -91,6 +94,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget fieldUserName() {
+    return SizedBox(
+      width: 340,
+      child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
+        controller: _username,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (nombre) => nombre!.startsWith(RegExp(r'[A-Z]'))
+            ? null
+            : "Porfavor introduzca la primera letra en mayusucla",
+        decoration: InputDecoration(
+          labelText: 'Nombre',
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black, width: 3),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          filled: true,
+          fillColor: Colors.white,
         ),
       ),
     );
@@ -154,19 +180,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget fieldType() {
     return SizedBox(
       width: 340,
-      child: TextFormField(
-        keyboardType: TextInputType.text,
-        controller: _type,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: DropdownButtonFormField<String>(
+        value: _type.text.isNotEmpty ? _type.text : null,
+        onChanged: (newValue) {
+          setState(() {
+            _type.text = newValue!;
+          });
+        },
+        borderRadius: BorderRadius.circular(8),
         decoration: InputDecoration(
-          labelText: 'Tipo',
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.black, width: 3),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          filled: true,
-          fillColor: Colors.white,
-        ),
+            labelText: 'Tipo de usuario',
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black, width: 3),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            filled: true),
+        items: <String>['Cocinero', 'Camarero', 'Administrador']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        validator: (value) {
+          if (value == null) {
+            return 'Selecciona un tipo de usuario';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -186,8 +227,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: _email.text.trim(), password: _constrasena.text.trim())
-          .whenComplete(
-              () => addUser(FirebaseAuth.instance.currentUser!.uid, _type.text))
+          .whenComplete(() => addUser(FirebaseAuth.instance.currentUser!.uid,
+              _type.text, _username.text))
           .whenComplete(() => Navigator.pushNamed(context, 'Home'));
     } on FirebaseAuthException {
       return showDialog(

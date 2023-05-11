@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hostalapp/screen/prueba_screen.dart';
+import 'package:hostalapp/screen/waiter_screen.dart';
 import 'package:hostalapp/service/firebase_service.dart';
 import '../models/models.dart';
 import 'screens.dart';
@@ -37,9 +37,9 @@ class HomeScreen extends StatelessWidget {
                 if (snapshot.hasData) {
                   String? tipoUsuario = snapshot.data!.tipo;
                   if (tipoUsuario == "Cocinero") {
-                    return const PruebaScreen();
+                    return const WaiterScreen();
                   } else if (tipoUsuario == "Camarero") {
-                    return const PruebaScreen();
+                    return const WaiterScreen();
                   }
                 }
                 return const LoginOrRegisterScreen();
