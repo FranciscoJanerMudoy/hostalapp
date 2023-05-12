@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hostalapp/providers/passw_provider.dart';
+import 'package:hostalapp/providers/products_provider.dart';
 import 'package:hostalapp/routes/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,9 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (_) => PaswwProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductProvider(),
         )
       ],
       child: const MyApp(),

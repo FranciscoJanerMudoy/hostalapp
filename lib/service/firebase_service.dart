@@ -8,34 +8,44 @@ FirebaseAuth _auth = FirebaseAuth.instance;
 final User? user = _auth.currentUser;
 String? uid;
 
-CollectionReference collection_users = db.collection("Usuarios");
-CollectionReference collection_products = db.collection("Productos");
+CollectionReference collectionUsers = db.collection("Usuarios");
+CollectionReference collectionProducts = db.collection("Productos");
 
+// Metodos Usuarios
 Future<void> addUser(String uid, String tipo, String nombre) async {
   Usuario usuario = Usuario(uid: uid, tipo: tipo, nombre: nombre);
-  await collection_users.add(usuario.toMap());
+  await collectionUsers.add(usuario.toMap());
 }
 
 Future<Usuario> getUserById(String uid) async {
   Usuario usuario = Usuario();
   QuerySnapshot querySnapshot =
-      await collection_users.where("uid", isEqualTo: uid).get();
+      await collectionUsers.where("uid", isEqualTo: uid).get();
 
-  querySnapshot.docs.forEach((element) {
+  for (var element in querySnapshot.docs) {
     usuario = Usuario.fromMap(element.data() as Map<String, dynamic>);
-  });
+  }
 
   return usuario;
 }
 
-Future<List<Product>> getAllProducts() async {
+// Metodos Productos
+Future<List<Product>> getProducts() async {
   List<Product> productos = [];
 
-  QuerySnapshot querySnapshot = await collection_products.get();
+  QuerySnapshot querySnapshot = await collectionProducts.get();
 
-  querySnapshot.docs.forEach((element) {
+  for (var element in querySnapshot.docs) {
     productos.add(Product.fromMap(element.data() as Map<String, dynamic>));
-  });
+  }
 
   return productos;
 }
+
+/* Metodo para añadir platos en el caso de que sea necessario
+Future<void> addPlatos(Map<String, dynamic> productos) async {
+  productos.forEach((key, value) async {
+    await collectionProducts.add(value);
+  });
+}
+*/
