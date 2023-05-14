@@ -1,11 +1,11 @@
-class Product {
+class Producto {
   int? id;
   String? nombre;
   String? descripcion;
   String? tipo;
   double? precio;
 
-  Product({
+  Producto({
     required this.id,
     required this.nombre,
     required this.descripcion,
@@ -13,7 +13,7 @@ class Product {
     required this.precio,
   });
 
-  factory Product.fromMap(Map<String, dynamic> json) => Product(
+  factory Producto.fromMap(Map<String, dynamic> json) => Producto(
         id: json["id"],
         nombre: json["nombre"],
         descripcion: json["descripcion"],

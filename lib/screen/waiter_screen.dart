@@ -48,7 +48,9 @@ class WaiterScreen extends StatelessWidget {
                         width: size.width * 0.4,
                         height: size.height * 0.20,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, 'Take');
+                          },
                           child: const Icon(Icons.add),
                         ),
                       ),
@@ -56,7 +58,9 @@ class WaiterScreen extends StatelessWidget {
                         width: size.width * 0.4,
                         height: size.height * 0.20,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '');
+                          },
                           child: const Icon(Icons.add),
                         ),
                       ),
@@ -64,7 +68,9 @@ class WaiterScreen extends StatelessWidget {
                         width: size.width * 0.4,
                         height: size.height * 0.20,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '');
+                          },
                           child: const Icon(Icons.add),
                         ),
                       ),

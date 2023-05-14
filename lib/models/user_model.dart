@@ -5,7 +5,7 @@ class Usuario {
 
   Usuario({this.uid, this.tipo, this.nombre});
 
-  static Usuario fromMap(Map<String, dynamic> json) => Usuario(
+  factory Usuario.fromMap(Map<String, dynamic> json) => Usuario(
         uid: json["uid"],
         tipo: json["tipo"],
         nombre: json["nombre"],
