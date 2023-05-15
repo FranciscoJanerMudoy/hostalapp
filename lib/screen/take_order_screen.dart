@@ -57,7 +57,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
               child: Center(
                 child: TextButton(
                   onPressed: () {
-                    addComanda(productosSeleccionados, precioTotal);
+                    addOrder(productosSeleccionados, precioTotal);
 
                     setState(() {
                       tipoSeleccionado = "";

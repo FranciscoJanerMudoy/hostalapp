@@ -9,14 +9,15 @@ class Comanda {
 
   factory Comanda.fromMap(Map<String, dynamic> json) => Comanda(
         id: json["id"],
-        productos: json["productos"],
-        precio: json["precip"]?.toDouble(),
+        productos: List<Producto>.from(
+            json["productos"].map((x) => Producto.fromMap(x))),
+        precio: json["precio"]?.toDouble(),
       );
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
       "id": id,
-      "productos": productos,
+      "productos": List<dynamic>.from(productos!.map((x) => x.toMap())),
       "precio": precio,
     };
     return map;

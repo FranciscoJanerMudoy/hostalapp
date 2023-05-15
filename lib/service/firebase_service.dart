@@ -58,7 +58,21 @@ Future<List<Producto>> getProductsByType(String tipo) async {
 }
 
 //Metodos Comanda
-Future<void> addComanda(List<Producto> productos, double precio) async {
+
+Future<List<Comanda>> getOders() async {
+  List<Comanda> comandas = [];
+  QuerySnapshot querySnapshot = await collectionOrders.get();
+
+  for (var element in querySnapshot.docs) {
+    comandas.add(
+      Comanda.fromMap(element.data() as Map<String, dynamic>),
+    );
+  }
+
+  return comandas;
+}
+
+Future<void> addOrder(List<Producto> productos, double precio) async {
   Comanda comanda = Comanda(productos: productos, precio: precio);
   collectionOrders.add(comanda.toMap());
 }
