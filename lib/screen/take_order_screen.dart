@@ -26,25 +26,30 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
           FutureBuilder(
             future: getProducts(),
             builder: (context, snapshot) {
-              List<Producto> productos = snapshot.data!;
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: productos.length,
-                  itemBuilder: (context, index) {
-                    String type = productos[index].tipo!;
-                    return ListTile(
-                      title: Text(type),
-                      onTap: () {
-                        setState(() {
-                          // ignore: unnecessary_null_comparison
-                          tipoSeleccionado = type;
-                        });
-                      },
-                      selected: tipoSeleccionado == type,
-                    );
-                  },
-                ),
-              );
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error al cargar los productos'),
+                );
+              } else {
+                List<Producto>? productos = snapshot.data;
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: productos?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      String type = productos?[index].tipo ?? '';
+                      return ListTile(
+                        title: Text(type),
+                        onTap: () {
+                          setState(() {
+                            tipoSeleccionado = type;
+                          });
+                        },
+                        selected: tipoSeleccionado == type,
+                      );
+                    },
+                  ),
+                );
+              }
             },
           ),
           Expanded(flex: 2, child: construirListaProductos(tipoSeleccionado)),
@@ -78,20 +83,35 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
 
   Widget construirListaProductos(String tipo) {
     if (tipo == "") {
-      return FutureBuilder(
+      return FutureBuilder<List<Producto>>(
         future: getProducts(),
         builder: (context, snapshot) {
-          List<Producto> productos = snapshot.data!;
+          List<Producto>? productos = snapshot.data;
           return ListView.builder(
-            itemCount: productos.length,
+            itemCount: productos?.length ?? 0,
             itemBuilder: (context, index) {
+              final producto = productos?[index];
               return ListTile(
-                title: Text(productos[index].nombre!),
-                trailing: Text(productos[index].precio.toString()),
+                title: Text(producto?.nombre ?? ''),
+                trailing: GestureDetector(
+                  child: const Icon(Icons.edit),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      'Product',
+                      arguments: Producto(
+                          id: producto?.id,
+                          nombre: producto?.nombre,
+                          descripcion: producto?.descripcion,
+                          tipo: producto?.tipo,
+                          precio: producto?.precio),
+                    );
+                  },
+                ),
                 onTap: () {
                   setState(() {
-                    productosSeleccionados.add(productos[index]);
-                    precioTotal += productos[index].precio!;
+                    productosSeleccionados.add(producto!);
+                    precioTotal += producto.precio ?? 0;
                   });
                 },
               );
@@ -107,23 +127,28 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
             return const Center(
               child: Text('Error al cargar los productos'),
             );
-          } else {
-            List<Producto> productosPorTipo = snapshot.data!;
+          } else if (snapshot.hasData) {
+            List<Producto>? productosPorTipo = snapshot.data;
 
             return ListView.builder(
-              itemCount: productosPorTipo.length,
+              itemCount: productosPorTipo?.length ?? 0,
               itemBuilder: (context, index) {
+                final productoPorTipo = productosPorTipo?[index];
                 return ListTile(
-                  title: Text(productosPorTipo[index].nombre!),
-                  trailing: Text(productosPorTipo[index].precio.toString()),
+                  title: Text(productoPorTipo?.nombre ?? ''),
+                  trailing: Text(productoPorTipo?.precio.toString() ?? ''),
                   onTap: () {
                     setState(() {
-                      productosSeleccionados.add(productosPorTipo[index]);
-                      precioTotal += productosPorTipo[index].precio!;
+                      productosSeleccionados.add(productoPorTipo!);
+                      precioTotal += productoPorTipo?.precio ?? 0;
                     });
                   },
                 );
               },
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
         },
@@ -131,6 +156,5 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
     }
   }
 }
-
 
 //TODO no funciona a la hora de añadir la comanda

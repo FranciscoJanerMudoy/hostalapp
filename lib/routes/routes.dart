@@ -6,4 +6,5 @@ var customRutes = <String, WidgetBuilder>{
   'Reset': (BuildContext context) => const HomeScreen(),
   'Waiter': (BuildContext context) => const WaiterScreen(),
   'Take': (BuildContext context) => const TakeOrderScreen(),
+  'Product': (BuildContext context) => const ProductScreen(),
 };
