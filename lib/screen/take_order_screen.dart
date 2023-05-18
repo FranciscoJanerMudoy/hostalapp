@@ -140,7 +140,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                   onTap: () {
                     setState(() {
                       productosSeleccionados.add(productoPorTipo!);
-                      precioTotal += productoPorTipo?.precio ?? 0;
+                      precioTotal += productoPorTipo.precio ?? 0;
                     });
                   },
                 );

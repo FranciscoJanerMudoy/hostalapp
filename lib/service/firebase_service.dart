@@ -58,7 +58,6 @@ Future<List<Producto>> getProductsByType(String tipo) async {
 }
 
 //Metodos Comanda
-
 Future<List<Comanda>> getOders() async {
   List<Comanda> comandas = [];
   QuerySnapshot querySnapshot = await collectionOrders.get();

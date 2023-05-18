@@ -17,6 +17,9 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => PaswwProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => OrderProvider(),
+        )
       ],
       child: const MyApp(),
     ),
