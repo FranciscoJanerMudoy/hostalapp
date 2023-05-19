@@ -32,11 +32,15 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                 );
               } else {
                 List<Producto>? productos = snapshot.data;
+                List<String?>? tipos = productos
+                    ?.map((producto) => producto.tipo)
+                    .toSet()
+                    .toList();
                 return Expanded(
                   child: ListView.builder(
-                    itemCount: productos?.length ?? 0,
+                    itemCount: tipos?.length,
                     itemBuilder: (context, index) {
-                      String type = productos?[index].tipo ?? '';
+                      String type = tipos?[index] ?? '';
                       return ListTile(
                         title: Text(type),
                         onTap: () {
@@ -52,7 +56,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
               }
             },
           ),
-          Expanded(flex: 2, child: construirListaProductos(tipoSeleccionado)),
+          Expanded(flex: 3, child: construirListaProductos(tipoSeleccionado)),
         ],
       ),
       bottomNavigationBar: productosSeleccionados.isNotEmpty
@@ -136,7 +140,21 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                 final productoPorTipo = productosPorTipo?[index];
                 return ListTile(
                   title: Text(productoPorTipo?.nombre ?? ''),
-                  trailing: Text(productoPorTipo?.precio.toString() ?? ''),
+                  trailing: GestureDetector(
+                    child: const Icon(Icons.edit),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        'Product',
+                        arguments: Producto(
+                            id: productoPorTipo?.id,
+                            nombre: productoPorTipo?.nombre,
+                            descripcion: productoPorTipo?.descripcion,
+                            tipo: productoPorTipo?.tipo,
+                            precio: productoPorTipo?.precio),
+                      );
+                    },
+                  ),
                   onTap: () {
                     setState(() {
                       productosSeleccionados.add(productoPorTipo!);
@@ -156,5 +174,3 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
     }
   }
 }
-
-//TODO no funciona a la hora de añadir la comanda
