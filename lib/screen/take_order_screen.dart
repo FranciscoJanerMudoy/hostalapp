@@ -42,7 +42,9 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                     itemBuilder: (context, index) {
                       String type = tipos?[index] ?? '';
                       return ListTile(
-                        title: Text(type),
+                        title: type.isNotEmpty
+                            ? Image.asset('assets/${type}.jpeg')
+                            : const CircularProgressIndicator(),
                         onTap: () {
                           setState(() {
                             tipoSeleccionado = type;
@@ -56,7 +58,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
               }
             },
           ),
-          Expanded(flex: 3, child: construirListaProductos(tipoSeleccionado)),
+          Expanded(flex: 4, child: construirListaProductos(tipoSeleccionado)),
         ],
       ),
       bottomNavigationBar: productosSeleccionados.isNotEmpty
@@ -66,6 +68,21 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
               child: Center(
                 child: TextButton(
                   onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ListView.builder(
+                          itemCount: productosSeleccionados.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                  productosSeleccionados[index].nombre ?? ''),
+                            );
+                          },
+                        );
+                      },
+                    );
+                    /*
                     addOrder(productosSeleccionados, precioTotal);
 
                     setState(() {
@@ -73,9 +90,10 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                       productosSeleccionados.clear();
                       precioTotal = 0.0;
                     });
+                    */
                   },
                   child: Text(
-                    'Añadir Comanda (${productosSeleccionados.length}) - Total: \$${precioTotal.toStringAsFixed(2)}',
+                    'Añadir Comanda (${productosSeleccionados.length}) - Total: ${precioTotal.toStringAsFixed(2)}\€',
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
@@ -86,41 +104,51 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
   }
 
   Widget construirListaProductos(String tipo) {
-    if (tipo == "") {
+    if (tipo.isEmpty) {
       return FutureBuilder<List<Producto>>(
         future: getProducts(),
         builder: (context, snapshot) {
-          List<Producto>? productos = snapshot.data;
-          return ListView.builder(
-            itemCount: productos?.length ?? 0,
-            itemBuilder: (context, index) {
-              final producto = productos?[index];
-              return ListTile(
-                title: Text(producto?.nombre ?? ''),
-                trailing: GestureDetector(
-                  child: const Icon(Icons.edit),
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('Error al cargar los productos'),
+            );
+          } else if (snapshot.hasData) {
+            List<Producto>? productos = snapshot.data;
+            return ListView.builder(
+              itemCount: productos?.length ?? 0,
+              itemBuilder: (context, index) {
+                final producto = productos?[index];
+                return ListTile(
+                  title: Text(producto?.nombre ?? ''),
+                  trailing: GestureDetector(
+                    child: const Icon(Icons.info),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        'Product',
+                        arguments: Producto(
+                            id: producto?.id,
+                            nombre: producto?.nombre,
+                            descripcion: producto?.descripcion,
+                            tipo: producto?.tipo,
+                            precio: producto?.precio),
+                      );
+                    },
+                  ),
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      'Product',
-                      arguments: Producto(
-                          id: producto?.id,
-                          nombre: producto?.nombre,
-                          descripcion: producto?.descripcion,
-                          tipo: producto?.tipo,
-                          precio: producto?.precio),
-                    );
+                    setState(() {
+                      productosSeleccionados.add(producto!);
+                      precioTotal += producto.precio ?? 0;
+                    });
                   },
-                ),
-                onTap: () {
-                  setState(() {
-                    productosSeleccionados.add(producto!);
-                    precioTotal += producto.precio ?? 0;
-                  });
-                },
-              );
-            },
-          );
+                );
+              },
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
       );
     } else {
@@ -133,7 +161,6 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
             );
           } else if (snapshot.hasData) {
             List<Producto>? productosPorTipo = snapshot.data;
-
             return ListView.builder(
               itemCount: productosPorTipo?.length ?? 0,
               itemBuilder: (context, index) {
@@ -141,7 +168,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                 return ListTile(
                   title: Text(productoPorTipo?.nombre ?? ''),
                   trailing: GestureDetector(
-                    child: const Icon(Icons.edit),
+                    child: const Icon(Icons.info),
                     onTap: () {
                       Navigator.pushNamed(
                         context,

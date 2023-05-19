@@ -11,15 +11,60 @@ class ProductScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalles de Producto'),
+        title: const Text('Detalles del Producto'),
         centerTitle: true,
       ),
-      body: Center(
-          child: Column(
-        children: [
-          Text('Nombre: ${producto.nombre}'),
-        ],
-      )),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              producto.nombre ?? '',
+              style: const TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Descripción:',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              producto.descripcion ?? '',
+              style: const TextStyle(fontSize: 16.0),
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Tipo:',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              producto.tipo ?? '',
+              style: const TextStyle(fontSize: 16.0),
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Precio:',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              '${producto.precio?.toStringAsFixed(2)}\€',
+              style: const TextStyle(fontSize: 16.0),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
