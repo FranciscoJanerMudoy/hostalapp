@@ -1,5 +1,4 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hostalapp/service/firebase_service.dart';
 import 'package:provider/provider.dart';
@@ -19,28 +18,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _username = TextEditingController();
   final _email = TextEditingController();
   final _constrasena = TextEditingController();
-  TextEditingController _type = TextEditingController();
+  final TextEditingController _type = TextEditingController();
 
   final _key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
     return Scaffold(
       body: Form(
         key: _key,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const SizedBox(
-                height: 50,
+              SizedBox(
+                height: _size.height * 0.2,
               ),
-              CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.white,
-                child: Image.asset(
-                  'assets/logotransparent.jpg',
-                  fit: BoxFit.cover,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.wine_bar,
+                    size: _size.height * 0.05,
+                    color: Colors.green,
+                  ),
+                  Text(
+                    'HOSTAL ALGAIDA',
+                    style: TextStyle(
+                        fontSize: _size.width * 0.1, color: Colors.green),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: _size.height * 0.05,
               ),
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -49,28 +59,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: TextStyle(fontSize: 25),
                 ),
               ),
-              fieldUserName(),
-              const SizedBox(
-                height: 10,
+              fieldUserName(_size),
+              SizedBox(
+                height: _size.height * 0.01,
               ),
-              fieldEmail(),
-              const SizedBox(
-                height: 10,
+              fieldEmail(_size),
+              SizedBox(
+                height: _size.height * 0.01,
               ),
-              fieldPassword(context),
-              const SizedBox(
-                height: 10,
+              fieldPassword(context, _size),
+              SizedBox(
+                height: _size.height * 0.01,
               ),
-              fieldType(),
-              const SizedBox(
-                height: 10,
+              fieldType(_size),
+              SizedBox(
+                height: _size.height * 0.01,
               ),
               MyButtonWidget(
-                onTap: signUp,
+                onTap: () =>
+                    signUp(_email, _constrasena, _type, _username, context),
                 text: "Registrar",
               ),
-              const SizedBox(
-                height: 100,
+              SizedBox(
+                height: _size.height * 0.15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -99,9 +110,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget fieldUserName() {
+  Widget fieldUserName(Size size) {
     return SizedBox(
-      width: 340,
+      width: size.width * 0.87,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         controller: _username,
@@ -122,9 +133,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget fieldEmail() {
+  Widget fieldEmail(Size size) {
     return SizedBox(
-      width: 340,
+      width: size.width * 0.87,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         controller: _email,
@@ -145,10 +156,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget fieldPassword(BuildContext context) {
+  Widget fieldPassword(BuildContext context, Size size) {
     final passwProvider = Provider.of<PaswwProvider>(context);
     return SizedBox(
-      width: 340,
+      width: size.width * 0.87,
       child: TextFormField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (valor) => valor != null && valor.length < 6
@@ -177,9 +188,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget fieldType() {
+  Widget fieldType(Size size) {
     return SizedBox(
-      width: 340,
+      width: size.width * 0.87,
       child: DropdownButtonFormField<String>(
         value: _type.text.isNotEmpty ? _type.text : null,
         onChanged: (newValue) {
@@ -217,25 +228,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _email.dispose();
     _constrasena.dispose();
     super.dispose();
-  }
-
-  Future signUp() async {
-    final esValid = _key.currentState!.validate();
-    if (!esValid) return;
-
-    try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: _email.text.trim(), password: _constrasena.text.trim())
-          .whenComplete(() => addUser(FirebaseAuth.instance.currentUser!.uid,
-              _type.text, _username.text))
-          .whenComplete(() => Navigator.pushNamed(context, 'Home'));
-    } on FirebaseAuthException {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialogWidget.buildAlertDialog(context);
-          });
-    }
   }
 }

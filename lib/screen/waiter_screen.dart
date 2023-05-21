@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hostalapp/providers/providers.dart';
 import 'package:hostalapp/service/firebase_service.dart';
-import 'package:provider/provider.dart';
 
 import '../models/models.dart';
+import '../widgets/widgets.dart';
 
 class WaiterScreen extends StatelessWidget {
   const WaiterScreen({super.key});
@@ -15,69 +14,57 @@ class WaiterScreen extends StatelessWidget {
     String uid = firebaseAuth.currentUser!.uid;
     final Size size = MediaQuery.of(context).size;
     return FutureBuilder<Usuario?>(
-        future: getUserById(uid),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+      future: getUserById(uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text(
+                snapshot.data!.nombre.toString(),
               ),
-            );
-          } else {
-            return Scaffold(
-              appBar: AppBar(
-                centerTitle: true,
-                title: Text(
-                  snapshot.data!.nombre.toString(),
+              actions: [
+                GestureDetector(
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.logout),
+                  ),
+                  onTap: () => firebaseAuth.signOut(),
                 ),
-                actions: [
-                  GestureDetector(
-                    child: const Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Icon(Icons.logout),
+              ],
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: size.width * 0.4,
+                    height: size.height * 0.20,
+                    child: const WaiterButton(
+                      route: 'Take',
+                      icon: Icon(Icons.add),
                     ),
-                    onTap: () => firebaseAuth.signOut(),
+                  ),
+                  SizedBox(
+                    width: size.width * 0.4,
+                    height: size.height * 0.20,
+                    child: const WaiterButton(
+                      route: '',
+                      icon: Icon(Icons.clear),
+                    ),
                   ),
                 ],
               ),
-              body: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: size.width * 0.4,
-                        height: size.height * 0.20,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, 'Take');
-                          },
-                          child: const Icon(Icons.add),
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.4,
-                        height: size.height * 0.20,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '');
-                          },
-                          child: const Icon(Icons.add),
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.4,
-                        height: size.height * 0.20,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '');
-                          },
-                          child: const Icon(Icons.add),
-                        ),
-                      ),
-                    ]),
-              ),
-            );
-          }
-        });
+            ),
+          );
+        }
+      },
+    );
   }
 }

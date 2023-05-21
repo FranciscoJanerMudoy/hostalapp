@@ -1,6 +1,6 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hostalapp/service/firebase_service.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/providers.dart';
@@ -21,27 +21,36 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Size _size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            const SizedBox(
-              height: 50,
+            SizedBox(
+              height: _size.height * 0.2,
             ),
-            CircleAvatar(
-              radius: 80,
-              backgroundColor: Colors.white,
-              child: Image.asset(
-                'assets/logotransparent.jpg',
-                fit: BoxFit.cover,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.wine_bar,
+                  size: _size.height * 0.05,
+                  color: Colors.green,
+                ),
+                Text(
+                  'HOSTAL ALGAIDA',
+                  style: TextStyle(
+                      fontSize: _size.width * 0.1, color: Colors.green),
+                ),
+              ],
             ),
-            const Divider(
-              color: Colors.white,
+            SizedBox(
+              height: _size.height * 0.1,
             ),
-            fieldEmail(),
+            fieldEmail(_size),
             const Divider(
               color: Colors.white,
             ),
@@ -49,8 +58,8 @@ class _LogInScreenState extends State<LogInScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  width: 180,
+                SizedBox(
+                  width: _size.width * 0.5,
                 ),
                 TextButton(
                   onPressed: () {
@@ -62,11 +71,11 @@ class _LogInScreenState extends State<LogInScreen> {
               ],
             ),
             MyButtonWidget(
-              onTap: signIn,
+              onTap: () => signIn(_email, _constrasena, context),
               text: "LOG IN",
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: _size.height * 0.27,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -75,8 +84,8 @@ class _LogInScreenState extends State<LogInScreen> {
                   'No tienes cuenta?',
                   style: TextStyle(color: Colors.black),
                 ),
-                const SizedBox(
-                  width: 5,
+                SizedBox(
+                  width: _size.width * 0.02,
                 ),
                 GestureDetector(
                   onTap: widget.onTap,
@@ -94,9 +103,9 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget fieldEmail() {
+  Widget fieldEmail(Size size) {
     return SizedBox(
-      width: 340,
+      width: size.width * 0.87,
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         controller: _email,
@@ -119,9 +128,10 @@ class _LogInScreenState extends State<LogInScreen> {
 
   Widget fieldPassword(BuildContext context) {
     final passwProvider = Provider.of<PaswwProvider>(context);
+    final Size size = MediaQuery.of(context).size;
 
     return SizedBox(
-      width: 340,
+      width: size.width * 0.87,
       child: TextFormField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (valor) => valor != null && valor.length < 6
@@ -155,19 +165,5 @@ class _LogInScreenState extends State<LogInScreen> {
     _email.dispose();
     _constrasena.dispose();
     super.dispose();
-  }
-
-  Future signIn() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _email.text.trim(), password: _constrasena.text.trim());
-    } on FirebaseAuthException {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialogWidget.buildAlertDialog(context);
-        },
-      );
-    }
   }
 }

@@ -19,6 +19,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => OrderProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductProvider(),
         )
       ],
       child: const MyApp(),
@@ -36,6 +39,15 @@ class MyApp extends StatelessWidget {
       title: 'HostalApp',
       initialRoute: 'Home',
       routes: customRutes,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(color: Colors.green),
+        elevatedButtonTheme: const ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.green),
+          ),
+        ),
+      ),
     );
   }
 }

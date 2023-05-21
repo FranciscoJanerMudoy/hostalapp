@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:hostalapp/models/models.dart';
+
+import '../widgets/widgets.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 FirebaseAuth _auth = FirebaseAuth.instance;
@@ -71,10 +74,66 @@ Future<List<Comanda>> getOders() async {
 }
 
 Future<void> addOrder(List<Producto> productos, double precio) async {
-  Comanda comanda = Comanda(productos: productos, precio: precio);
+  QuerySnapshot querySnapshot = await collectionOrders.get();
+  Comanda comanda = Comanda(
+      id: querySnapshot.docs.length.toString(),
+      productos: productos,
+      precio: precio);
   collectionOrders.add(comanda.toMap());
 }
 
+//Metodos Login
+Future signIn(TextEditingController email, TextEditingController password,
+    BuildContext context) async {
+  try {
+    await signInWithEmailAndPassword(email.text.trim(), password.text.trim());
+  } on FirebaseAuthException {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialogWidget.buildAlertDialog(context);
+      },
+    );
+  }
+}
+
+Future signInWithEmailAndPassword(String email, String password) async {
+  await FirebaseAuth.instance
+      .signInWithEmailAndPassword(email: email, password: password);
+}
+
+// Metodos SignUp
+Future signUp(
+    TextEditingController email,
+    TextEditingController password,
+    TextEditingController type,
+    TextEditingController username,
+    BuildContext context) async {
+  final key = GlobalKey<FormState>();
+  final esValid = key.currentState!.validate();
+  if (!esValid) return;
+
+  try {
+    await createUserWithEmailAndPassword(email.text.trim(),
+        password.text.trim(), type.text.trim(), username.text.trim(), context);
+  } on FirebaseAuthException {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialogWidget.buildAlertDialog(context);
+      },
+    );
+  }
+}
+
+Future createUserWithEmailAndPassword(String email, String password,
+    String type, String username, BuildContext context) async {
+  await FirebaseAuth.instance
+      .createUserWithEmailAndPassword(email: email, password: password)
+      .whenComplete(
+          () => addUser(FirebaseAuth.instance.currentUser!.uid, type, username))
+      .whenComplete(() => Navigator.pushNamed(context, 'Home'));
+}
 /* Metodo para añadir platos en el caso de que sea necessario
 Future<void> addPlatos(Map<String, dynamic> productos) async {
   productos.forEach((key, value) async {

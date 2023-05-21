@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hostalapp/models/models.dart';
+import 'package:hostalapp/providers/providers.dart';
 import 'package:hostalapp/service/firebase_service.dart';
+import 'package:provider/provider.dart';
 
 class TakeOrderScreen extends StatefulWidget {
-  const TakeOrderScreen({super.key});
+  const TakeOrderScreen({Key? key}) : super(key: key);
 
   @override
   State<TakeOrderScreen> createState() => _TakeOrderScreenState();
@@ -11,11 +13,13 @@ class TakeOrderScreen extends StatefulWidget {
 
 class _TakeOrderScreenState extends State<TakeOrderScreen> {
   String tipoSeleccionado = "";
-  List<Producto> productosSeleccionados = [];
-  double precioTotal = 0.0;
 
   @override
   Widget build(BuildContext context) {
+    double precioTotal =
+        Provider.of<ProductProvider>(context, listen: true).precioTotal;
+    final productosAgrupados =
+        Provider.of<ProductProvider>(context, listen: true).productosAgrupados;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Realizar Comanda"),
@@ -43,7 +47,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                       String type = tipos?[index] ?? '';
                       return ListTile(
                         title: type.isNotEmpty
-                            ? Image.asset('assets/${type}.jpeg')
+                            ? Image.asset('assets/$type.jpeg')
                             : const CircularProgressIndicator(),
                         onTap: () {
                           setState(() {
@@ -61,39 +65,17 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
           Expanded(flex: 4, child: construirListaProductos(tipoSeleccionado)),
         ],
       ),
-      bottomNavigationBar: productosSeleccionados.isNotEmpty
+      bottomNavigationBar: productosAgrupados.isNotEmpty
           ? Container(
+              color: Colors.green,
               height: 50.0,
-              color: Colors.blue,
               child: Center(
                 child: TextButton(
                   onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ListView.builder(
-                          itemCount: productosSeleccionados.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(
-                                  productosSeleccionados[index].nombre ?? ''),
-                            );
-                          },
-                        );
-                      },
-                    );
-                    /*
-                    addOrder(productosSeleccionados, precioTotal);
-
-                    setState(() {
-                      tipoSeleccionado = "";
-                      productosSeleccionados.clear();
-                      precioTotal = 0.0;
-                    });
-                    */
+                    Navigator.pushNamed(context, "ConfirmOrder");
                   },
                   child: Text(
-                    'Añadir Comanda (${productosSeleccionados.length}) - Total: ${precioTotal.toStringAsFixed(2)}\€',
+                    'Añadir Comanda (${productosAgrupados.length}) - Total: ${precioTotal.toStringAsFixed(2)}\€',
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
@@ -115,31 +97,19 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
           } else if (snapshot.hasData) {
             List<Producto>? productos = snapshot.data;
             return ListView.builder(
-              itemCount: productos?.length ?? 0,
+              itemCount: productos?.length,
               itemBuilder: (context, index) {
-                final producto = productos?[index];
+                Producto? producto = productos?[index];
                 return ListTile(
                   title: Text(producto?.nombre ?? ''),
                   trailing: GestureDetector(
                     child: const Icon(Icons.info),
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        'Product',
-                        arguments: Producto(
-                            id: producto?.id,
-                            nombre: producto?.nombre,
-                            descripcion: producto?.descripcion,
-                            tipo: producto?.tipo,
-                            precio: producto?.precio),
-                      );
-                    },
+                    onTap: () => Navigator.pushNamed(context, 'Product',
+                        arguments: producto),
                   ),
                   onTap: () {
-                    setState(() {
-                      productosSeleccionados.add(producto!);
-                      precioTotal += producto.precio ?? 0;
-                    });
+                    Provider.of<ProductProvider>(context, listen: false)
+                        .agregarProductoAgrupado(producto!);
                   },
                 );
               },
@@ -160,33 +130,20 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
               child: Text('Error al cargar los productos'),
             );
           } else if (snapshot.hasData) {
-            List<Producto>? productosPorTipo = snapshot.data;
+            List<Producto>? productos = snapshot.data;
             return ListView.builder(
-              itemCount: productosPorTipo?.length ?? 0,
+              itemCount: productos?.length,
               itemBuilder: (context, index) {
-                final productoPorTipo = productosPorTipo?[index];
+                Producto? producto = productos?[index];
                 return ListTile(
-                  title: Text(productoPorTipo?.nombre ?? ''),
+                  title: Text(producto?.nombre ?? ''),
                   trailing: GestureDetector(
-                    child: const Icon(Icons.info),
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        'Product',
-                        arguments: Producto(
-                            id: productoPorTipo?.id,
-                            nombre: productoPorTipo?.nombre,
-                            descripcion: productoPorTipo?.descripcion,
-                            tipo: productoPorTipo?.tipo,
-                            precio: productoPorTipo?.precio),
-                      );
-                    },
-                  ),
+                      child: const Icon(Icons.info),
+                      onTap: () => Navigator.pushNamed(context, 'Product',
+                          arguments: producto)),
                   onTap: () {
-                    setState(() {
-                      productosSeleccionados.add(productoPorTipo!);
-                      precioTotal += productoPorTipo.precio ?? 0;
-                    });
+                    Provider.of<ProductProvider>(context, listen: false)
+                        .agregarProductoAgrupado(producto!);
                   },
                 );
               },
