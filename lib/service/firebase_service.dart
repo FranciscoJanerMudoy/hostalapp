@@ -73,12 +73,14 @@ Future<List<Comanda>> getOders() async {
   return comandas;
 }
 
-Future<void> addOrder(List<Producto> productos, double precio) async {
+Future<void> addOrder(
+    List<Producto> productos, double precio, String estado) async {
   QuerySnapshot querySnapshot = await collectionOrders.get();
   Comanda comanda = Comanda(
       id: querySnapshot.docs.length.toString(),
       productos: productos,
-      precio: precio);
+      precio: precio,
+      estado: estado);
   collectionOrders.add(comanda.toMap());
 }
 

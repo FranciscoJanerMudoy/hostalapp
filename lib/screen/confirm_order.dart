@@ -37,7 +37,7 @@ class ConfirmOrder extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              addOrder(productos, productProvider.precioTotal);
+              addOrder(productos, productProvider.precioTotal, "En proceso");
               productProvider.limpiarProductos();
               Navigator.pushNamedAndRemoveUntil(
                   context, 'Waiter', (route) => false);
