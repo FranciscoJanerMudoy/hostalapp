@@ -74,13 +74,14 @@ Future<List<Comanda>> getOders() async {
 }
 
 Future<void> addOrder(
-    List<Producto> productos, double precio, String estado) async {
+    List<Producto> productos, double precio, String estado, int numMesa) async {
   QuerySnapshot querySnapshot = await collectionOrders.get();
   Comanda comanda = Comanda(
       id: querySnapshot.docs.length.toString(),
       productos: productos,
       precio: precio,
-      estado: estado);
+      estado: estado,
+      mesa: numMesa);
   collectionOrders.add(comanda.toMap());
 }
 
@@ -93,7 +94,10 @@ Future signIn(TextEditingController email, TextEditingController password,
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialogWidget.buildAlertDialog(context);
+        return AlertDialogWidget(
+                titleText: 'Error de inicio de sesión',
+                contentText: 'Complete todos los campos')
+            .buildAlertDialog(context);
       },
     );
   }
@@ -122,7 +126,10 @@ Future signUp(
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialogWidget.buildAlertDialog(context);
+        return AlertDialogWidget(
+                contentText: 'Contraseña o correo electrónico incorrectos.',
+                titleText: 'Error inicio de sesión')
+            .buildAlertDialog(context);
       },
     );
   }

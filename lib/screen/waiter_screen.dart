@@ -55,7 +55,7 @@ class WaiterScreen extends StatelessWidget {
                     width: size.width * 0.4,
                     height: size.height * 0.20,
                     child: const WaiterButton(
-                      route: '',
+                      route: 'EditOrder',
                       icon: Icon(Icons.clear),
                     ),
                   ),

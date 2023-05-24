@@ -75,7 +75,7 @@ class _LogInScreenState extends State<LogInScreen> {
               text: "LOG IN",
             ),
             SizedBox(
-              height: _size.height * 0.27,
+              height: _size.height * 0.23,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

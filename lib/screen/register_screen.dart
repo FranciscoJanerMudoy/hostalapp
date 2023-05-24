@@ -81,7 +81,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 text: "Registrar",
               ),
               SizedBox(
-                height: _size.height * 0.15,
+                height: _size.height * 0.09,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

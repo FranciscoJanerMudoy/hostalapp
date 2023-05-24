@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AlertDialogWidget {
-  static AlertDialog buildAlertDialog(BuildContext context) {
+  String? titleText;
+  String? contentText;
+  AlertDialogWidget({required this.titleText, required this.contentText});
+  AlertDialog buildAlertDialog(BuildContext context) {
     return AlertDialog(
-      title: const Text('Error de inicio de sesión'),
-      content: const Text('Contraseña o correo electrónico incorrectos.'),
+      title: Text('$titleText'),
+      content: Text('$contentText'),
       actions: <Widget>[
         TextButton(
           onPressed: () {
