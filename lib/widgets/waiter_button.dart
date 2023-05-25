@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class WaiterButton extends StatelessWidget {
   final String? route;
   final String? text;
-  const WaiterButton({super.key, required this.route, required this.text});
+  final Function? function;
+  const WaiterButton(
+      {super.key, required this.route, required this.text, this.function});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.pushNamed(context, '$route');
-      },
+      onPressed: function as void Function()?,
       child: Text('$text'),
     );
   }

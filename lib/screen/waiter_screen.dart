@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hostalapp/providers/order_provider.dart';
 import 'package:hostalapp/service/firebase_service.dart';
+import 'package:provider/provider.dart';
 
 import '../models/models.dart';
 import '../widgets/widgets.dart';
@@ -35,8 +38,33 @@ class WaiterScreen extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     child: Icon(Icons.logout),
                   ),
-                  onTap: () => firebaseAuth.signOut(),
-                ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("¿Estás seguro?"),
+                          content: const Text("¿Deseas cerrar sesión?"),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text("Cancelar"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text("Aceptar"),
+                              onPressed: () {
+                                FirebaseAuth.instance.signOut();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                )
               ],
             ),
             body: Center(
@@ -46,17 +74,23 @@ class WaiterScreen extends StatelessWidget {
                   SizedBox(
                     width: size.width * 0.4,
                     height: size.height * 0.20,
-                    child: const WaiterButton(
+                    child: WaiterButton(
                       route: 'Take',
                       text: "   Añadir\nComanda",
+                      function: () => Navigator.pushNamed(context, "TakeOrder"),
                     ),
                   ),
                   SizedBox(
                     width: size.width * 0.4,
                     height: size.height * 0.20,
-                    child: const WaiterButton(
+                    child: WaiterButton(
                       route: 'EditOrder',
                       text: 'Modificar\nComanda',
+                      function: () {
+                        Provider.of<OrderProvider>(context, listen: false)
+                            .getAllComandas();
+                        Navigator.pushNamed(context, "EditOrder");
+                      },
                     ),
                   ),
                 ],

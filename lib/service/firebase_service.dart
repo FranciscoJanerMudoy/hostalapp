@@ -86,11 +86,12 @@ Future<void> addOrder(
 }
 
 Future<void> deleteOrder(int id) async {
-  QuerySnapshot querySnapshot =
-      await collectionOrders.where("id", isEqualTo: id).get();
+  final querySnapshot =
+      await collectionOrders.where('mesa', isEqualTo: id).get();
+
   if (querySnapshot.docs.isNotEmpty) {
-    DocumentReference documentRef = querySnapshot.docs[0].reference;
-    await documentRef.delete();
+    final documentId = querySnapshot.docs[0].id;
+    await collectionOrders.doc(documentId).delete();
   }
 }
 
@@ -105,7 +106,7 @@ Future signIn(TextEditingController email, TextEditingController password,
       builder: (BuildContext context) {
         return AlertDialogWidget(
                 titleText: 'Error de inicio de sesión',
-                contentText: 'Complete todos los campos')
+                contentText: 'Email o contraseña incorrectos')
             .buildAlertDialog(context);
       },
     );
@@ -136,8 +137,8 @@ Future signUp(
       context: context,
       builder: (BuildContext context) {
         return AlertDialogWidget(
-                contentText: 'Contraseña o correo electrónico incorrectos.',
-                titleText: 'Error inicio de sesión')
+                titleText: 'Error al registarse',
+                contentText: 'Porfavor introduzca todos los campos')
             .buildAlertDialog(context);
       },
     );
@@ -152,6 +153,7 @@ Future createUserWithEmailAndPassword(String email, String password,
           () => addUser(FirebaseAuth.instance.currentUser!.uid, type, username))
       .whenComplete(() => Navigator.pushNamed(context, 'Home'));
 }
+
 /* Metodo para añadir platos en el caso de que sea necessario
 Future<void> addPlatos(Map<String, dynamic> productos) async {
   productos.forEach((key, value) async {
