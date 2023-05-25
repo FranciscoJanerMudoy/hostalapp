@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class WaiterButton extends StatelessWidget {
   final String? route;
-  final Icon icon;
-  const WaiterButton({super.key, required this.route, required this.icon});
+  final String? text;
+  const WaiterButton({super.key, required this.route, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class WaiterButton extends StatelessWidget {
       onPressed: () {
         Navigator.pushNamed(context, '$route');
       },
-      child: icon,
+      child: Text('$text'),
     );
   }
 }

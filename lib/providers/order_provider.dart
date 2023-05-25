@@ -9,4 +9,11 @@ class OrderProvider extends ChangeNotifier {
     comandas = await getOders();
     notifyListeners();
   }
+
+  deleteById(int id) async {
+    final orderIndex = comandas.indexWhere((comanda) => comanda.mesa == id);
+    await deleteOrder(id);
+    comandas.removeAt(orderIndex);
+    notifyListeners();
+  }
 }

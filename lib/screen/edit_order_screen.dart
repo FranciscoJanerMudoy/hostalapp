@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hostalapp/providers/order_provider.dart';
+import 'package:hostalapp/service/firebase_service.dart';
 import 'package:provider/provider.dart';
 
 class EditOrderScreen extends StatelessWidget {
@@ -8,29 +9,49 @@ class EditOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orderProvider = Provider.of<OrderProvider>(context, listen: true);
-    orderProvider.getAllComandas();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Editar comanda'),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: orderProvider.comandas.length,
-        itemBuilder: (context, index) {
-          return Material(
-            color: Colors.white,
-            elevation: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: Text('Comanda: ${orderProvider.comandas[index].mesa}'),
-                shape: BeveledRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-          );
+      body: FutureBuilder(
+        future: getOders(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: orderProvider.comandas.length,
+              itemBuilder: (context, index) {
+                return Material(
+                  color: Colors.white,
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      title: Text(
+                        'Comanda de la mesa: ${orderProvider.comandas[index].mesa}',
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, "InfoOrder",
+                            arguments: orderProvider.comandas[index]);
+                      },
+                      trailing: GestureDetector(
+                        child: const Icon(Icons.delete),
+                        onTap: () => Provider.of<OrderProvider>(context,
+                                listen: false)
+                            .deleteById(orderProvider.comandas[index].mesa!),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            return const Text('Error al cargar las comandas');
+          }
         },
       ),
     );

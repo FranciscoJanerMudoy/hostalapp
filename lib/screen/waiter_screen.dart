@@ -48,7 +48,7 @@ class WaiterScreen extends StatelessWidget {
                     height: size.height * 0.20,
                     child: const WaiterButton(
                       route: 'Take',
-                      icon: Icon(Icons.add),
+                      text: "   Añadir\nComanda",
                     ),
                   ),
                   SizedBox(
@@ -56,7 +56,7 @@ class WaiterScreen extends StatelessWidget {
                     height: size.height * 0.20,
                     child: const WaiterButton(
                       route: 'EditOrder',
-                      icon: Icon(Icons.clear),
+                      text: 'Modificar\nComanda',
                     ),
                   ),
                 ],

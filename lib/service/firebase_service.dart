@@ -85,6 +85,15 @@ Future<void> addOrder(
   collectionOrders.add(comanda.toMap());
 }
 
+Future<void> deleteOrder(int id) async {
+  QuerySnapshot querySnapshot =
+      await collectionOrders.where("id", isEqualTo: id).get();
+  if (querySnapshot.docs.isNotEmpty) {
+    DocumentReference documentRef = querySnapshot.docs[0].reference;
+    await documentRef.delete();
+  }
+}
+
 //Metodos Login
 Future signIn(TextEditingController email, TextEditingController password,
     BuildContext context) async {

@@ -1,3 +1,6 @@
+export 'package:hostalapp/screen/info_order_screen.dart';
+export 'package:hostalapp/screen/edit_order_screen.dart';
+export 'package:hostalapp/screen/confirm_order_screen.dart';
 export 'package:hostalapp/screen/product_screen.dart';
 export 'package:hostalapp/screen/take_order_screen.dart';
 export 'package:hostalapp/screen/waiter_screen.dart';
