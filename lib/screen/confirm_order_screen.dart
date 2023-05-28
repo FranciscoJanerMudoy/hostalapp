@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hostalapp/models/product_model.dart';
 import 'package:hostalapp/providers/product_provider.dart';
 import 'package:hostalapp/service/firebase_service.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +18,6 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   Widget build(BuildContext context) {
     final Size _size = MediaQuery.of(context).size;
     final productProvider = Provider.of<ProductProvider>(context, listen: true);
-    List<Producto> productos = productProvider.productosAgrupados.values
-        .expand((lista) => lista)
-        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -60,17 +56,18 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_key.currentState!.validate()) {
-                addOrder(
-                  productos,
+                await addOrder(
+                  productProvider.lProductosSeleccionados,
                   productProvider.precioTotal,
                   "En proceso",
                   _mesaSeleccionada!,
                 );
-                productProvider.limpiarProductos();
+                // ignore: use_build_context_synchronously
                 Navigator.pushNamedAndRemoveUntil(
                     context, 'Waiter', (route) => false);
+                productProvider.limpiarProductos();
               }
             },
             child: const Text('Confirmar'),
@@ -118,19 +115,16 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   }
 
   Widget construirListaProductosAgrupados(BuildContext context) {
-    final productosAgrupados =
-        Provider.of<ProductProvider>(context, listen: true).productosAgrupados;
+    final productosSeleccionados =
+        Provider.of<ProductProvider>(context, listen: true)
+            .lProductosSeleccionados;
 
     return Expanded(
       child: ListView.builder(
-        itemCount: productosAgrupados.length,
+        itemCount: productosSeleccionados.length,
         itemBuilder: (context, index) {
-          final nombreProducto = productosAgrupados.keys.toList()[index];
-          final productos = productosAgrupados.values.toList()[index];
-          final cantidad = productos.length;
-
           return ListTile(
-            title: Text(nombreProducto ?? ''),
+            title: Text(productosSeleccionados[index].nombre ?? ''),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -138,14 +132,15 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                   child: const Icon(Icons.remove),
                   onTap: () {
                     Provider.of<ProductProvider>(context, listen: false)
-                        .eliminarProductoAgrupado(productos[0]);
+                        .eliminarProductoSeleccionado(
+                            productosSeleccionados[index]);
                   },
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Text(
-                  '( $cantidad )',
+                  '( ${productosSeleccionados[index].cantidad} )',
                   style: const TextStyle(fontSize: 18),
                 ),
                 const SizedBox(
@@ -155,7 +150,8 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                   child: const Icon(Icons.add),
                   onTap: () {
                     Provider.of<ProductProvider>(context, listen: false)
-                        .agregarProductoAgrupado(productos[0]);
+                        .agregarProductoSeleccionado(
+                            productosSeleccionados[index]);
                   },
                 ),
               ],

@@ -76,8 +76,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: _size.height * 0.01,
               ),
               MyButtonWidget(
-                onTap: () =>
-                    signUp(_email, _constrasena, _type, _username, context),
+                onTap: () => signUp(_email.text, _constrasena.text, _type.text,
+                    _username.text, context, _key),
                 text: "Registrar",
               ),
               SizedBox(

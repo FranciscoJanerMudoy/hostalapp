@@ -22,14 +22,11 @@ class Comanda {
       estado: json["estado"],
       mesa: json["mesa"]);
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {
-      "id": id,
-      "productos": List<dynamic>.from(productos!.map((x) => x.toMap())),
-      "precio": precio,
-      "estado": estado,
-      "mesa": mesa
-    };
-    return map;
-  }
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "productos": List<dynamic>.from(productos!.map((x) => x.toMap())),
+        "precio": precio,
+        "estado": estado,
+        "mesa": mesa
+      };
 }

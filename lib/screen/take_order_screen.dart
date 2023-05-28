@@ -18,8 +18,9 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
   Widget build(BuildContext context) {
     double precioTotal =
         Provider.of<ProductProvider>(context, listen: true).precioTotal;
-    final productosAgrupados =
-        Provider.of<ProductProvider>(context, listen: true).productosAgrupados;
+    final productosSeleccionados =
+        Provider.of<ProductProvider>(context, listen: true)
+            .lProductosSeleccionados;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Realizar Comanda"),
@@ -65,7 +66,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
           Expanded(flex: 4, child: construirListaProductos(tipoSeleccionado)),
         ],
       ),
-      bottomNavigationBar: productosAgrupados.isNotEmpty
+      bottomNavigationBar: productosSeleccionados.isNotEmpty
           ? Container(
               color: Colors.green,
               height: 50.0,
@@ -75,7 +76,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                     Navigator.pushNamed(context, "ConfirmOrder");
                   },
                   child: Text(
-                    'Añadir Comanda (${productosAgrupados.length}) - Total: ${precioTotal.toStringAsFixed(2)}\€',
+                    'Añadir Comanda (${productosSeleccionados.length}) - Total: ${precioTotal.toStringAsFixed(2)}\€',
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
@@ -109,7 +110,7 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                   ),
                   onTap: () {
                     Provider.of<ProductProvider>(context, listen: false)
-                        .agregarProductoAgrupado(producto!);
+                        .agregarProductoSeleccionado(producto!);
                   },
                 );
               },
@@ -138,12 +139,13 @@ class _TakeOrderScreenState extends State<TakeOrderScreen> {
                 return ListTile(
                   title: Text(producto?.nombre ?? ''),
                   trailing: GestureDetector(
-                      child: const Icon(Icons.info),
-                      onTap: () => Navigator.pushNamed(context, 'Product',
-                          arguments: producto)),
+                    child: const Icon(Icons.info),
+                    onTap: () => Navigator.pushNamed(context, 'Product',
+                        arguments: producto),
+                  ),
                   onTap: () {
                     Provider.of<ProductProvider>(context, listen: false)
-                        .agregarProductoAgrupado(producto!);
+                        .agregarProductoSeleccionado(producto!);
                   },
                 );
               },

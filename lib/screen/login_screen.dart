@@ -71,7 +71,7 @@ class _LogInScreenState extends State<LogInScreen> {
               ],
             ),
             MyButtonWidget(
-              onTap: () => signIn(_email, _constrasena, context),
+              onTap: () => signIn(_email.text, _constrasena.text, context),
               text: "LOG IN",
             ),
             SizedBox(

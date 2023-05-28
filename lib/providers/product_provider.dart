@@ -3,34 +3,52 @@ import 'package:hostalapp/models/models.dart';
 
 class ProductProvider extends ChangeNotifier {
   double precioTotal = 0.0;
-  Map<String?, List<Producto>> productosAgrupados = {};
+  List<Producto> lProductosSeleccionados = [];
 
   void limpiarProductos() {
-    productosAgrupados.clear();
+    lProductosSeleccionados.clear();
     precioTotal = 0.0;
     notifyListeners();
   }
 
-  void agregarProductoAgrupado(Producto producto) {
-    final String? nombreProducto = producto.nombre;
-    productosAgrupados[nombreProducto] ??= [];
-    productosAgrupados[nombreProducto]!.add(producto);
+  void agregarProductoSeleccionado(Producto producto) {
+    if (lProductosSeleccionados.isEmpty) {
+      producto.cantidad = 1;
+      lProductosSeleccionados.add(producto);
+    } else {
+      bool productoExistente = false;
+
+      for (var lproducto in lProductosSeleccionados) {
+        if (lproducto.nombre == producto.nombre) {
+          lproducto.cantidad = (lproducto.cantidad ?? 0) + 1;
+          productoExistente = true;
+          break;
+        }
+      }
+
+      if (!productoExistente) {
+        producto.cantidad = 1;
+        lProductosSeleccionados.add(producto);
+      }
+    }
 
     precioTotal += producto.precio!;
     notifyListeners();
   }
 
-  void eliminarProductoAgrupado(Producto producto) {
-    final String? nombreProducto = producto.nombre;
-    if (productosAgrupados.containsKey(nombreProducto)) {
-      final List<Producto> productos = productosAgrupados[nombreProducto]!;
-      if (productos.length > 1) {
-        productosAgrupados[nombreProducto]!.remove(producto);
-      } else {
-        productosAgrupados.remove(nombreProducto);
+  void eliminarProductoSeleccionado(Producto producto) {
+    for (var lproducto in lProductosSeleccionados) {
+      if (lproducto.nombre == producto.nombre) {
+        if (lproducto.cantidad! > 1) {
+          lproducto.cantidad = (lproducto.cantidad ?? 0) - 1;
+        } else {
+          lProductosSeleccionados.remove(lproducto);
+        }
+        break;
       }
-      precioTotal -= producto.precio!;
     }
+
+    precioTotal -= producto.precio!;
     notifyListeners();
   }
 }

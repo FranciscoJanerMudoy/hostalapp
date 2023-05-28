@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hostalapp/models/models.dart';
+import 'package:hostalapp/providers/product_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/widgets.dart';
 
@@ -20,7 +22,7 @@ Future<void> addUser(String uid, String tipo, String nombre) async {
   await collectionUsers.add(usuario.toMap());
 }
 
-Future<Usuario> getUserById(String uid) async {
+Future<Usuario> getUserById(String? uid) async {
   Usuario usuario = Usuario();
   QuerySnapshot querySnapshot =
       await collectionUsers.where("uid", isEqualTo: uid).get();
@@ -76,17 +78,19 @@ Future<List<Comanda>> getOders() async {
 Future<void> addOrder(
     List<Producto> productos, double precio, String estado, int numMesa) async {
   QuerySnapshot querySnapshot = await collectionOrders.get();
+
   Comanda comanda = Comanda(
       id: querySnapshot.docs.length.toString(),
       productos: productos,
       precio: precio,
       estado: estado,
       mesa: numMesa);
+
   collectionOrders.add(comanda.toMap());
 }
 
 Future<void> deleteOrder(int id) async {
-  final querySnapshot =
+  QuerySnapshot querySnapshot =
       await collectionOrders.where('mesa', isEqualTo: id).get();
 
   if (querySnapshot.docs.isNotEmpty) {
@@ -95,11 +99,19 @@ Future<void> deleteOrder(int id) async {
   }
 }
 
+Future<void> updateOrder(String id, Comanda comanda) async {
+  QuerySnapshot querySnapshot =
+      await collectionOrders.where('id', isEqualTo: id).get();
+  if (querySnapshot.docs.isNotEmpty) {
+    final documentId = querySnapshot.docs[0].id;
+    await collectionOrders.doc(documentId).update(comanda.toMap());
+  }
+}
+
 //Metodos Login
-Future signIn(TextEditingController email, TextEditingController password,
-    BuildContext context) async {
+Future signIn(String email, String password, BuildContext context) async {
   try {
-    await signInWithEmailAndPassword(email.text.trim(), password.text.trim());
+    await signInWithEmailAndPassword(email, password);
   } on FirebaseAuthException {
     showDialog(
       context: context,
@@ -119,40 +131,68 @@ Future signInWithEmailAndPassword(String email, String password) async {
 }
 
 // Metodos SignUp
-Future signUp(
-    TextEditingController email,
-    TextEditingController password,
-    TextEditingController type,
-    TextEditingController username,
-    BuildContext context) async {
-  final key = GlobalKey<FormState>();
-  final esValid = key.currentState!.validate();
-  if (!esValid) return;
-
-  try {
-    await createUserWithEmailAndPassword(email.text.trim(),
-        password.text.trim(), type.text.trim(), username.text.trim(), context);
-  } on FirebaseAuthException {
-    return showDialog(
+Future<void> signUp(
+  String email,
+  String password,
+  String type,
+  String username,
+  BuildContext context,
+  GlobalKey<FormState> key,
+) async {
+  final isValid = key.currentState?.validate() ?? false;
+  if (!isValid) {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialogWidget(
-                titleText: 'Error al registarse',
-                contentText: 'Porfavor introduzca todos los campos')
-            .buildAlertDialog(context);
+          titleText: 'Error al registrarse',
+          contentText: 'Por favor, introduzca todos los campos',
+        ).buildAlertDialog(context);
+      },
+    );
+  } else {
+    await createUserWithEmailAndPassword(
+      email.trim(),
+      password.trim(),
+      type.trim(),
+      username.trim(),
+      context,
+    );
+  }
+}
+
+Future<void> createUserWithEmailAndPassword(
+  String email,
+  String password,
+  String type,
+  String username,
+  BuildContext context,
+) async {
+  try {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      await addUser(currentUser.uid, type, username);
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamedAndRemoveUntil(context, 'Home', (route) => false);
+    }
+  } on FirebaseAuthException catch (e) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialogWidget(
+          titleText: 'Error al registrarse',
+          contentText: 'El mail que ha introducido ya existe',
+        ).buildAlertDialog(context);
       },
     );
   }
 }
 
-Future createUserWithEmailAndPassword(String email, String password,
-    String type, String username, BuildContext context) async {
-  await FirebaseAuth.instance
-      .createUserWithEmailAndPassword(email: email, password: password)
-      .whenComplete(
-          () => addUser(FirebaseAuth.instance.currentUser!.uid, type, username))
-      .whenComplete(() => Navigator.pushNamed(context, 'Home'));
-}
+
 
 /* Metodo para añadir platos en el caso de que sea necessario
 Future<void> addPlatos(Map<String, dynamic> productos) async {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hostalapp/providers/order_provider.dart';
-import 'package:hostalapp/service/firebase_service.dart';
 import 'package:provider/provider.dart';
 
 class EditOrderScreen extends StatelessWidget {

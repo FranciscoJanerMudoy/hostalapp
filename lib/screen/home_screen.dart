@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hostalapp/screen/waiter_screen.dart';
 import 'package:hostalapp/service/firebase_service.dart';
 import '../models/models.dart';
 import 'screens.dart';
@@ -35,12 +34,15 @@ class HomeScreen extends StatelessWidget {
                   );
                 }
                 if (snapshot.hasData) {
-                  String? tipoUsuario = snapshot.data!.tipo;
-                  if (tipoUsuario == "Cocinero") {
-                    return const WaiterScreen();
-                  } else if (tipoUsuario == "Camarero") {
-                    return const WaiterScreen();
-                  }
+                  return const WaiterScreen(); // Puedes mostrar la misma pantalla para ambos tipos de usuario
+                }
+                if (snapshot.hasError) {
+                  // Maneja los errores adecuadamente
+                  return Scaffold(
+                    body: Center(
+                      child: Text('Error: ${snapshot.error.toString()}'),
+                    ),
+                  );
                 }
                 return const LoginOrRegisterScreen();
               },
