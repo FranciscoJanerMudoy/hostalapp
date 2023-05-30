@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hostalapp/providers/order_provider.dart';
 import 'package:hostalapp/service/firebase_service.dart';
@@ -27,7 +26,6 @@ class WaiterScreen extends StatelessWidget {
           );
         } else {
           if (snapshot.hasData && snapshot.data != null) {
-            // Comprobación adicional de snapshot.hasData y snapshot.data
             return Scaffold(
               appBar: AppBar(
                 centerTitle: true,
@@ -103,7 +101,6 @@ class WaiterScreen extends StatelessWidget {
               ),
             );
           } else {
-            // Maneja el caso en el que snapshot.hasData sea falso o snapshot.data sea nulo
             return const Scaffold(
               body: Center(
                 child: Text('No se pudo cargar la información del usuario.'),

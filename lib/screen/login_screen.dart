@@ -55,20 +55,8 @@ class _LogInScreenState extends State<LogInScreen> {
               color: Colors.white,
             ),
             fieldPassword(context),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: _size.width * 0.5,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'Reset',
-                        arguments: _email.text);
-                  },
-                  child: const Text('Contraseña perdida?'),
-                )
-              ],
+            const Divider(
+              color: Colors.white,
             ),
             MyButtonWidget(
               onTap: () => signIn(_email.text, _constrasena.text, context),

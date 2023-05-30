@@ -36,7 +36,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
               Form(
                 key: _key,
                 child: Center(
-                  child: fieldType(_size),
+                  child: fieldTable(_size),
                 ),
               ),
               construirListaProductosAgrupados(context)
@@ -77,7 +77,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
     );
   }
 
-  Widget fieldType(Size size) {
+  Widget fieldTable(Size size) {
     return SizedBox(
       width: size.width * 0.87,
       child: DropdownButtonFormField<int>(
