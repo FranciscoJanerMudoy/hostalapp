@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hostalapp/models/models.dart';
-import 'package:hostalapp/providers/product_provider.dart';
-import 'package:provider/provider.dart';
 
 import '../widgets/widgets.dart';
 
@@ -62,7 +60,7 @@ Future<List<Producto>> getProductsByType(String tipo) async {
 }
 
 //Metodos Comanda
-Future<List<Comanda>> getOders() async {
+Future<List<Comanda>> getOrders() async {
   List<Comanda> comandas = [];
   QuerySnapshot querySnapshot = await collectionOrders.get();
 
@@ -73,6 +71,14 @@ Future<List<Comanda>> getOders() async {
   }
 
   return comandas;
+}
+
+Future<List<int>> getOrdersTables() async {
+  List<int> mesas = [];
+  QuerySnapshot? querySnapshot = await collectionOrders.get();
+
+  mesas = querySnapshot.docs.map((doc) => doc.get('mesa') as int).toList();
+  return mesas;
 }
 
 Future<void> addOrder(
@@ -87,6 +93,10 @@ Future<void> addOrder(
       mesa: numMesa);
 
   collectionOrders.add(comanda.toMap());
+}
+
+Future<void> changeOrderState(String id, String nuevoEstado) async {
+  collectionOrders.doc(id).update({'estado': nuevoEstado});
 }
 
 Future<void> deleteOrder(int id) async {

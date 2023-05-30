@@ -22,6 +22,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => ProductProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => MesasProvider(),
         )
       ],
       child: const MyApp(),

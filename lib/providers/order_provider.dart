@@ -6,7 +6,7 @@ class OrderProvider extends ChangeNotifier {
   List<Comanda> comandas = [];
 
   getAllComandas() async {
-    comandas = await getOders();
+    comandas = await getOrders();
     notifyListeners();
   }
 

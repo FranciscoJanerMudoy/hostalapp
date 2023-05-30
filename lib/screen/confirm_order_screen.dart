@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hostalapp/providers/product_provider.dart';
+import 'package:hostalapp/providers/providers.dart';
 import 'package:hostalapp/service/firebase_service.dart';
 import 'package:provider/provider.dart';
 
@@ -61,12 +62,13 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
                 await addOrder(
                   productProvider.lProductosSeleccionados,
                   productProvider.precioTotal,
-                  "En proceso",
+                  "En preparación",
                   _mesaSeleccionada!,
                 );
                 // ignore: use_build_context_synchronously
                 Navigator.pushNamedAndRemoveUntil(
                     context, 'Waiter', (route) => false);
+
                 productProvider.limpiarProductos();
               }
             },
@@ -78,6 +80,9 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
   }
 
   Widget fieldTable(Size size) {
+    final mesasProvider = Provider.of<MesasProvider>(context, listen: true);
+    mesasProvider.getMesasDisponibles();
+    final mesasDisponibles = mesasProvider.mesasDisponibles;
     return SizedBox(
       width: size.width * 0.87,
       child: DropdownButtonFormField<int>(
@@ -96,7 +101,7 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
           ),
           filled: true,
         ),
-        items: <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map<DropdownMenuItem<int>>(
+        items: mesasDisponibles.map<DropdownMenuItem<int>>(
           (int value) {
             return DropdownMenuItem<int>(
               value: value,
