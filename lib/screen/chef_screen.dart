@@ -17,7 +17,9 @@ class _ChefScreenState extends State<ChefScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final orderProvider = Provider.of<OrderProvider>(context, listen: true);
+    TextEditingController _nuevoEstado = TextEditingController();
+    final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+    orderProvider.getAllComandas();
 
     return Scaffold(
       appBar: AppBar(
@@ -65,25 +67,23 @@ class _ChefScreenState extends State<ChefScreen> {
         itemCount: orderProvider.comandas.length,
         itemBuilder: (context, index) {
           Comanda comanda = orderProvider.comandas[index];
-          if (comanda.estado != "En preparación") {
+          if (comanda.estado == "En preparación") {
             return Container(
               width: 200,
               margin: const EdgeInsets.all(8),
               child: Card(
+                elevation: 20,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Comanda #${orderProvider.comandas[index].id}'),
+                    Text('Comanda #${comanda.id}'),
                     const SizedBox(height: 8),
-                    Text('Mesa: ${orderProvider.comandas[index].mesa}'),
+                    Text('Mesa: ${comanda.mesa}'),
                     const SizedBox(height: 8),
                     DropdownButton<String>(
-                      value: orderProvider.comandas[index].estado,
+                      value: comanda.estado,
                       onChanged: (nuevoEstado) {
-                        () {
-                          changeOrderState(orderProvider.comandas[index].id!,
-                              nuevoEstado!); // Actualizar el estado de la comanda al seleccionar un nuevo estado en el menú desplegable
-                        };
+                        orderProvider.updateOrderState(
+                            comanda.mesa!, nuevoEstado!);
                       },
                       items: [
                         'En preparación',
@@ -101,10 +101,6 @@ class _ChefScreenState extends State<ChefScreen> {
                   ],
                 ),
               ),
-            );
-          } else {
-            return const Center(
-              child: Text("No hay comandas en preparación"),
             );
           }
         },

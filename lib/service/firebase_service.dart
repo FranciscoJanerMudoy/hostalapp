@@ -95,8 +95,15 @@ Future<void> addOrder(
   collectionOrders.add(comanda.toMap());
 }
 
-Future<void> changeOrderState(String id, String nuevoEstado) async {
-  collectionOrders.doc(id).update({'estado': nuevoEstado});
+Future<void> changeOrderState(int id, String nuevoEstado) async {
+  QuerySnapshot querySnapshot =
+      await collectionOrders.where('mesa', isEqualTo: id).get();
+  if (querySnapshot.docs.isNotEmpty) {
+    final documentId = querySnapshot.docs[0].id;
+    await collectionOrders.doc(documentId).update(
+      {'estado': nuevoEstado},
+    );
+  }
 }
 
 Future<void> deleteOrder(int id) async {

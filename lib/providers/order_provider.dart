@@ -16,4 +16,8 @@ class OrderProvider extends ChangeNotifier {
     comandas.removeAt(orderIndex);
     notifyListeners();
   }
+
+  updateOrderState(int id, String nuevoEstado) async {
+    await changeOrderState(id, nuevoEstado);
+  }
 }
