@@ -6,13 +6,7 @@ class Comanda {
   double? precio;
   String? estado;
   int? mesa;
-
-  Comanda(
-      {required this.id,
-      required this.productos,
-      required this.precio,
-      required this.estado,
-      required this.mesa});
+  Comanda({this.id, this.productos, this.precio, this.estado, this.mesa});
 
   factory Comanda.fromMap(Map<String, dynamic> json) => Comanda(
       id: json["id"],

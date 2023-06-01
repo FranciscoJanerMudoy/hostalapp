@@ -11,5 +11,6 @@ var customRutes = <String, WidgetBuilder>{
   'ConfirmOrder': (BuildContext context) => const ConfirmOrder(),
   "EditOrder": (BuildContext context) => const EditOrderScreen(),
   "InfoOrder": (BuildContext context) => const InfoOrderScreen(),
-  'Chef': (BuildContext context) => const ChefScreen()
+  'Chef': (BuildContext context) => const ChefScreen(),
+  'EditOrderProducts': (BuildContext context) => const EditOrderProductsScreen()
 };

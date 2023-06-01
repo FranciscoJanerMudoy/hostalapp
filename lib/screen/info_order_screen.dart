@@ -12,8 +12,7 @@ class InfoOrderScreen extends StatefulWidget {
 class _InfoOrderScreenState extends State<InfoOrderScreen> {
   @override
   Widget build(BuildContext context) {
-    final Comanda comanda =
-        ModalRoute.of(context)?.settings.arguments as Comanda;
+    Comanda comanda = ModalRoute.of(context)?.settings.arguments as Comanda;
 
     return Scaffold(
       appBar: AppBar(
@@ -57,12 +56,35 @@ class _InfoOrderScreenState extends State<InfoOrderScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Platos:',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                const Text(
+                  'Platos:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      "EditOrderProducts",
+                      arguments: comanda,
+                    ).then((value) {
+                      if (value != null) {
+                        setState(() {
+                          comanda = value as Comanda;
+                        });
+                      }
+                    });
+                  },
+                  child: const Icon(Icons.add),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             Expanded(
@@ -101,12 +123,14 @@ class _InfoOrderScreenState extends State<InfoOrderScreen> {
                         GestureDetector(
                           child: const Icon(Icons.add),
                           onTap: () {
-                            setState(() {
-                              comanda.productos![index].cantidad =
-                                  comanda.productos![index].cantidad! + 1;
-                              comanda.precio =
-                                  (comanda.precio! + producto.precio!);
-                            });
+                            setState(
+                              () {
+                                comanda.productos![index].cantidad =
+                                    comanda.productos![index].cantidad! + 1;
+                                comanda.precio =
+                                    (comanda.precio! + producto.precio!);
+                              },
+                            );
                           },
                         ),
                       ],
