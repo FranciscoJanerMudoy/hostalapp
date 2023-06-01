@@ -36,6 +36,7 @@ dependencies:
   firebase_core: ^2.10.0
   flutter:
     sdk: flutter
+  printing: ^5.11.0
   provider: ^6.0.5
 
 dev_dependencies:

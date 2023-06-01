@@ -15,7 +15,7 @@ class AdminScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Bienvendio"),
+        title: const Text("Bienvenido"),
         actions: [
           GestureDetector(
             child: const Padding(
@@ -53,6 +53,7 @@ class AdminScreen extends StatelessWidget {
           ),
         ],
       ),
+      drawer: const SideMenu(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -76,6 +77,19 @@ class AdminScreen extends StatelessWidget {
                   Provider.of<OrderProvider>(context, listen: false)
                       .getAllComandas();
                   Navigator.pushNamed(context, "EditOrder");
+                },
+              ),
+            ),
+            SizedBox(
+              width: size.width * 0.4,
+              height: size.height * 0.20,
+              child: WaiterButton(
+                route: 'Tiquets',
+                text: 'Tiquets',
+                function: () {
+                  Provider.of<OrderProvider>(context, listen: false)
+                      .getAllComandas();
+                  Navigator.pushNamed(context, "Tiquets");
                 },
               ),
             ),
