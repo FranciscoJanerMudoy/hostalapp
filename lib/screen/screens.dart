@@ -1,3 +1,4 @@
+export 'package:hostalapp/screen/admin_screen.dart';
 export 'package:hostalapp/screen/edit_order_products_screen.dart';
 export 'package:hostalapp/screen/info_order_screen.dart';
 export 'package:hostalapp/screen/edit_order_screen.dart';

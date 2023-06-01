@@ -7,7 +7,7 @@ import 'screens.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +41,9 @@ class HomeScreen extends StatelessWidget {
                   }
                   if (usuario.tipo == "Camarero") {
                     return const WaiterScreen();
+                  }
+                  if (usuario.tipo == "Administrador") {
+                    return const AdminScreen();
                   }
                 }
                 if (snapshot.hasError) {
