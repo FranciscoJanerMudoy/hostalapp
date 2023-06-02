@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hostalapp/screen/chef_screen.dart';
 import 'package:hostalapp/screen/screens.dart';
+import 'package:hostalapp/screen/tiquet_order_screen.dart';
 
 var customRutes = <String, WidgetBuilder>{
   'Home': (BuildContext context) => const HomeScreen(),
@@ -12,5 +13,7 @@ var customRutes = <String, WidgetBuilder>{
   "EditOrder": (BuildContext context) => const EditOrderScreen(),
   "InfoOrder": (BuildContext context) => const InfoOrderScreen(),
   'Chef': (BuildContext context) => const ChefScreen(),
-  'EditOrderProducts': (BuildContext context) => const EditOrderProductsScreen()
+  'EditOrderProducts': (BuildContext context) =>
+      const EditOrderProductsScreen(),
+  'Tiquets': (BuildContext context) => const TiquetScreen(),
 };

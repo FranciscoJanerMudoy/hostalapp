@@ -88,7 +88,7 @@ class AdminScreen extends StatelessWidget {
                 text: 'Tiquets',
                 function: () {
                   Provider.of<OrderProvider>(context, listen: false)
-                      .getAllComandas();
+                      .getComandasByType("Entregado");
                   Navigator.pushNamed(context, "Tiquets");
                 },
               ),

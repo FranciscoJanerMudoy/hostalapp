@@ -38,6 +38,7 @@ class ChefScreen extends StatelessWidget {
                         child: const Text("Aceptar"),
                         onPressed: () async {
                           await FirebaseAuth.instance.signOut();
+                          // ignore: use_build_context_synchronously
                           Navigator.pushNamedAndRemoveUntil(
                               context, 'Home', (route) => false);
                         },
@@ -55,12 +56,12 @@ class ChefScreen extends StatelessWidget {
           orderProvider.getAllComandas();
 
           return Wrap(
-            spacing: 5,
-            runSpacing: 5,
+            spacing: size.width * 0.001,
+            runSpacing: size.width * 0.001,
             children: orderProvider.comandas
                 .where((comanda) => comanda.estado == "En preparación")
                 .map((comanda) => Container(
-                      width: size.width * 0.19,
+                      width: size.width * 0.18,
                       height: size.height * 0.4,
                       margin: const EdgeInsets.all(5),
                       child: Card(
@@ -81,7 +82,7 @@ class ChefScreen extends StatelessWidget {
                                   fontSize: 16,
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: size.height * 0.02),
                               Text(
                                 'Mesa: ${comanda.mesa}',
                                 style: const TextStyle(
@@ -89,7 +90,7 @@ class ChefScreen extends StatelessWidget {
                                   fontSize: 14,
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              SizedBox(height: size.height * 0.01),
                               Expanded(
                                 child: SingleChildScrollView(
                                   child: ListView.builder(
@@ -112,7 +113,7 @@ class ChefScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              SizedBox(height: size.height * 0.01),
                               DropdownButton<String>(
                                 value: comanda.estado,
                                 onChanged: (nuevoEstado) {

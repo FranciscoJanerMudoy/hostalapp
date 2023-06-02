@@ -81,6 +81,21 @@ Future<List<int>> getOrdersTables() async {
   return mesas;
 }
 
+Future<List<Comanda>> getOrdersByType(String estado) async {
+  List<Comanda> comandas = [];
+  QuerySnapshot querySnapshot =
+      await collectionOrders.where('estado', isEqualTo: estado).get();
+
+  for (var element in querySnapshot.docs) {
+    comandas.add(
+      Comanda.fromMap(element.data() as Map<String, dynamic>),
+    );
+    print(element);
+  }
+
+  return comandas;
+}
+
 Future<void> addOrder(
     List<Producto> productos, double precio, String estado, int numMesa) async {
   QuerySnapshot querySnapshot = await collectionOrders.get();
