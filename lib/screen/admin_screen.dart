@@ -53,7 +53,6 @@ class AdminScreen extends StatelessWidget {
           ),
         ],
       ),
-      drawer: const SideMenu(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -75,7 +74,7 @@ class AdminScreen extends StatelessWidget {
                 text: 'Modificar\nComanda',
                 function: () {
                   Provider.of<OrderProvider>(context, listen: false)
-                      .getAllComandas();
+                      .getComandasByType("En preparación");
                   Navigator.pushNamed(context, "EditOrder");
                 },
               ),

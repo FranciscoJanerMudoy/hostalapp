@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hostalapp/screen/chef_screen.dart';
 import 'package:hostalapp/screen/screens.dart';
-import 'package:hostalapp/screen/tiquet_order_screen.dart';
 
 var customRutes = <String, WidgetBuilder>{
   'Home': (BuildContext context) => const HomeScreen(),

@@ -15,7 +15,7 @@ class EditOrderScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: ListView.builder(
-        itemCount: orderProvider.comandas.length,
+        itemCount: orderProvider.comandasByType.length,
         itemBuilder: (context, index) {
           return Material(
             color: Colors.white,
@@ -24,7 +24,7 @@ class EditOrderScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 title: Text(
-                  'Comanda de la mesa: ${orderProvider.comandas[index].mesa}',
+                  'Comanda de la mesa: ${orderProvider.comandasByType[index].mesa}',
                   style: const TextStyle(fontSize: 20),
                 ),
                 shape: BeveledRectangleBorder(
@@ -32,13 +32,13 @@ class EditOrderScreen extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.pushNamed(context, "InfoOrder",
-                      arguments: orderProvider.comandas[index]);
+                      arguments: orderProvider.comandasByType[index]);
                 },
                 trailing: GestureDetector(
                   child: const Icon(Icons.delete),
                   onTap: () {
                     orderProvider
-                        .deleteById(orderProvider.comandas[index].mesa!);
+                        .deleteById(orderProvider.comandasByType[index].mesa!);
                   },
                 ),
               ),

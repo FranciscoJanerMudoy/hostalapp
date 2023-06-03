@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 import '../models/models.dart';
 import '../service/firebase_service.dart';
@@ -18,7 +19,6 @@ class _EditOrderProductsScreenState extends State<EditOrderProductsScreen> {
   @override
   Widget build(BuildContext context) {
     Comanda comanda = ModalRoute.of(context)?.settings.arguments as Comanda;
-    List<Producto> productosComanda = [...comanda.productos!];
     return Scaffold(
       appBar: AppBar(
         title: const Text("Añadir productos"),
@@ -71,13 +71,22 @@ class _EditOrderProductsScreenState extends State<EditOrderProductsScreen> {
               child: Center(
                 child: TextButton(
                   onPressed: () {
-                    productosSeleccionados.forEach((element) {
-                      productosComanda.add(element);
-                      comanda.precio =
-                          (comanda.precio ?? 0) + (element.precio ?? 0);
-                    });
-                    comanda.productos = productosComanda;
-                    Navigator.pop(context, comanda);
+                    for (var element in productosSeleccionados) {
+                      var existingProduct = comanda.productos?.firstWhereOrNull(
+                        (producto) => producto.id == element.id,
+                      );
+
+                      if (existingProduct != null) {
+                        existingProduct.cantidad =
+                            existingProduct.cantidad! + 1;
+                      } else {
+                        element.cantidad = 1;
+                        comanda.productos?.add(element);
+                      }
+                      comanda.precio = comanda.precio! + element.precio!;
+
+                      Navigator.pop(context, comanda);
+                    }
                   },
                   child: Text(
                     'Añadir productos (${productosSeleccionados.length})',

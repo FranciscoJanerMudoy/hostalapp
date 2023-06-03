@@ -17,9 +17,9 @@ class OrderProvider extends ChangeNotifier {
   }
 
   deleteById(int id) async {
-    final orderIndex = comandas.indexWhere((comanda) => comanda.mesa == id);
     await deleteOrder(id);
-    comandas.removeAt(orderIndex);
+    comandas.removeWhere((comanda) => comanda.mesa == id);
+    comandasByType.removeWhere((comanda) => comanda.mesa == id);
     notifyListeners();
   }
 

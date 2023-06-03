@@ -91,7 +91,7 @@ class WaiterScreen extends StatelessWidget {
                         text: 'Modificar\nComanda',
                         function: () {
                           Provider.of<OrderProvider>(context, listen: false)
-                              .getAllComandas();
+                              .getComandasByType("En preparación");
                           Navigator.pushNamed(context, "EditOrder");
                         },
                       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
-import 'dart:typed_data';
+// ignore: depend_on_referenced_packages
 import 'package:pdf/pdf.dart';
+// ignore: depend_on_referenced_packages
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 
 class PreviewScreen extends StatelessWidget {
   final pw.Document doc;
@@ -20,7 +20,7 @@ class PreviewScreen extends StatelessWidget {
           },
         ),
         centerTitle: true,
-        title: const Text("Preview"),
+        title: const Text("Comanda"),
       ),
       body: PdfPreview(
         build: (format) => doc.save(),

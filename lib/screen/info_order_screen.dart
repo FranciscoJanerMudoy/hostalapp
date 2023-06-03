@@ -49,7 +49,7 @@ class _InfoOrderScreenState extends State<InfoOrderScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Precio: ${comanda.precio}',
+              'Precio: ${comanda.precio}€',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

@@ -90,7 +90,6 @@ Future<List<Comanda>> getOrdersByType(String estado) async {
     comandas.add(
       Comanda.fromMap(element.data() as Map<String, dynamic>),
     );
-    print(element);
   }
 
   return comandas;
@@ -211,7 +210,7 @@ Future<void> createUserWithEmailAndPassword(
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(context, 'Home', (route) => false);
     }
-  } on FirebaseAuthException catch (e) {
+  } on FirebaseAuthException {
     showDialog(
       context: context,
       builder: (BuildContext context) {

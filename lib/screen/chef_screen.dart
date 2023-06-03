@@ -54,7 +54,6 @@ class ChefScreen extends StatelessWidget {
       body: Consumer<OrderProvider>(
         builder: (context, orderProvider, _) {
           orderProvider.getAllComandas();
-
           return Wrap(
             spacing: size.width * 0.001,
             runSpacing: size.width * 0.001,
@@ -121,6 +120,7 @@ class ChefScreen extends StatelessWidget {
                                     comanda.mesa!,
                                     nuevoEstado!,
                                   );
+                                  orderProvider.getComandasByType("Entregado");
                                 },
                                 items: ['En preparación', 'Entregado']
                                     .map<DropdownMenuItem<String>>(
