@@ -27,6 +27,7 @@ class PreviewScreen extends StatelessWidget {
         allowSharing: true,
         allowPrinting: true,
         initialPageFormat: PdfPageFormat.a5,
+        canChangeOrientation: true,
       ),
     );
   }

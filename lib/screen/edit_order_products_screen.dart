@@ -84,9 +84,8 @@ class _EditOrderProductsScreenState extends State<EditOrderProductsScreen> {
                         comanda.productos?.add(element);
                       }
                       comanda.precio = comanda.precio! + element.precio!;
-
-                      Navigator.pop(context, comanda);
                     }
+                    Navigator.pop(context, comanda);
                   },
                   child: Text(
                     'Añadir productos (${productosSeleccionados.length})',
