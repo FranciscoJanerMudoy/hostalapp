@@ -162,9 +162,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       width: size.width * 0.87,
       child: TextFormField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (valor) => valor != null && valor.length < 6
-            ? 'Introduce un minimo de 6 caracteres'
-            : null,
+        validator: (valor) {
+          if (_type.text.contains("Administrador") &&
+              !(valor != null && valor.startsWith("admin"))) {
+            return "Para poder realizar esto necesitas un patrón especifico";
+          }
+          if (valor!.length < 6) {
+            return "Introduzca una contraseña";
+          }
+          return null;
+        },
         controller: _constrasena,
         obscureText: passwProvider.password,
         decoration: InputDecoration(
