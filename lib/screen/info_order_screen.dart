@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hostalapp/models/models.dart';
 import 'package:hostalapp/service/firebase_service.dart';
+import 'package:hostalapp/widgets/widgets.dart';
 
 class InfoOrderScreen extends StatefulWidget {
   const InfoOrderScreen({Key? key}) : super(key: key);
@@ -147,8 +148,21 @@ class _InfoOrderScreenState extends State<InfoOrderScreen> {
         children: [
           ElevatedButton(
             onPressed: () {
-              updateOrder(comanda.id.toString(), comanda);
-              Navigator.pop(context);
+              if (comanda.productos!.isNotEmpty) {
+                updateOrder(comanda.id.toString(), comanda);
+                Navigator.pop(context);
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialogWidget(
+                            titleText: 'Atención!!',
+                            contentText:
+                                'No puedes eliminar todos los productos, en este caso puedes borrar la comanda')
+                        .buildAlertDialog(context);
+                  },
+                );
+              }
             },
             child: const Text('Confirmar'),
           ),

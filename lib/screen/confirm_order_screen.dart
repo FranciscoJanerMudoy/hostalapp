@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hostalapp/providers/product_provider.dart';
 import 'package:hostalapp/providers/providers.dart';
 import 'package:hostalapp/service/firebase_service.dart';
+import 'package:hostalapp/widgets/alertdialog.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmOrder extends StatefulWidget {
@@ -60,14 +60,28 @@ class _ConfirmOrderState extends State<ConfirmOrder> {
           ElevatedButton(
             onPressed: () async {
               if (_key.currentState!.validate()) {
-                await addOrder(
-                  productProvider.lProductosSeleccionados,
-                  productProvider.precioTotal,
-                  "En preparación",
-                  _mesaSeleccionada!,
-                );
-                Navigator.pop(context);
-                productProvider.limpiarProductos();
+                if (productProvider.lProductosSeleccionados.isNotEmpty) {
+                  await addOrder(
+                    productProvider.lProductosSeleccionados,
+                    productProvider.precioTotal,
+                    "En preparación",
+                    _mesaSeleccionada!,
+                  );
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                  productProvider.limpiarProductos();
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialogWidget(
+                              titleText: 'Atención!!!',
+                              contentText:
+                                  'No puedes intruduir una comanda sin porductos')
+                          .buildAlertDialog(context);
+                    },
+                  );
+                }
               }
             },
             child: const Text('Confirmar'),
