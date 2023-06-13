@@ -43,14 +43,14 @@ class MyApp extends StatelessWidget {
       initialRoute: 'Home',
       routes: customRutes,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(color: Colors.green),
-        elevatedButtonTheme: const ElevatedButtonThemeData(
-          style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.green),
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: const AppBarTheme(color: Colors.green),
+          elevatedButtonTheme: const ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Colors.green),
+            ),
           ),
-        ),
-      ),
+          dividerColor: Colors.white),
     );
   }
 }
