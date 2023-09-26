@@ -17,50 +17,54 @@ class ProductScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               producto.nombre ?? '',
               style: const TextStyle(
-                fontSize: 24.0,
+                fontSize: 30.0,
                 fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16.0),
             const Text(
               'Descripción:',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 25.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const Divider(),
             Text(
               producto.descripcion ?? '',
-              style: const TextStyle(fontSize: 16.0),
+              style: const TextStyle(fontSize: 20.0),
             ),
             const SizedBox(height: 16.0),
             const Text(
               'Tipo:',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 25.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const Divider(),
             Text(
               producto.tipo ?? '',
-              style: const TextStyle(fontSize: 16.0),
+              style: const TextStyle(fontSize: 20.0),
             ),
             const SizedBox(height: 16.0),
             const Text(
               'Precio:',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 25.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const Divider(),
             Text(
               '${producto.precio?.toStringAsFixed(2)}\€',
-              style: const TextStyle(fontSize: 16.0),
+              style: const TextStyle(fontSize: 20.0),
             ),
           ],
         ),
