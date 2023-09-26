@@ -4,5 +4,10 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
+<<<<<<< HEAD
+=======
+	<key>com.apple.security.print</key>
+	<true/>
+>>>>>>> b8393722e1798bfdd06afcc49557958aa46a0b32
 </dict>
 </plist>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1030158426358",
+    "project_id": "hostalapp-10b25",
+    "storage_bucket": "hostalapp-10b25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030158426358:android:563c000b0cc26342ad4cd7",
+        "android_client_info": {
+          "package_name": "com.example.hostalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030158426358-2caetah5m36bo1gc4bjol48p1heqi578.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAqVp8cDI5BRTBKxKQb3iRVUFUiaPwCNY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030158426358-2caetah5m36bo1gc4bjol48p1heqi578.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
